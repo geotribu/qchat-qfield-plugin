@@ -9,7 +9,11 @@ QChat client in QField, let's chat with your GIS tribe on the field !
 
 You can follow [the QField documentation](https://docs.qfield.org/how-to/plugins/#application-plugins) regarding plugin installation.
 
-The URL to install the `QChat` plugin is : `https://github.com/geotribu/qchat-qfield-plugin/releases/latest/download/qfield-plugin-qchat.zip`.
+The URL to install the `QChat` plugin is:
+
+```
+https://github.com/geotribu/qchat-qfield-plugin/releases/latest/download/qfield-plugin-qchat.zip
+```
 
 ----
 
