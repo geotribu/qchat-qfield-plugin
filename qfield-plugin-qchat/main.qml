@@ -19,7 +19,7 @@ Item {
     id: qchatSettings
     property string lastUrl: 'gischat.geotribu.net'//wss://gischat.geotribu.net/room/QGIS/ws'
     property string lastRoom: 'QGIS'
-    property string lastUserName: 'nirvn'
+    property string lastUserName: 'Geotribu'
   }
 
   Component.onCompleted: {
