@@ -17,4 +17,14 @@ https://github.com/geotribu/qchat-qfield-plugin/releases/latest/download/qfield-
 
 ----
 
+## Development
+
+- Install precommit tools with:
+
+```sh
+pre-commit install
+```
+
+----
+
 Shout out to @nirvn, the initiator of this QField plugin. Thanks for the amazing work !

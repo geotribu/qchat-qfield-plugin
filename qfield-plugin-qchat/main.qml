@@ -76,7 +76,7 @@ Item {
 
         contentItem: TextField {
           id: serverUrlField
-        
+
           inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase
           enabled: ws.status == WebSocket.Closed
           font: Theme.defaultFont
@@ -116,7 +116,7 @@ Item {
 
         contentItem: TextField {
           id: serverRoomField
-        
+
           inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase
           enabled: ws.status == WebSocket.Closed
           font: Theme.defaultFont
@@ -140,7 +140,7 @@ Item {
           serverRoomField.text = displayText;
         }
       }
-      
+
       TextField {
         id: userNameInput
         width: connectionLabel.width
@@ -154,7 +154,7 @@ Item {
 
     onAccepted: {
       ws.active = false
-      ws.url = "wss://"+serverUrlField.text.trim()+"/room/"+serverRoomField.text.trim()+"/ws"
+      ws.url = "wss://" + serverUrlField.text.trim() + "/room/" + serverRoomField.text.trim() + "/ws"
       ws.active = true
 
       qchatSettings.lastUserName = userNameInput.text.trim()
@@ -178,14 +178,12 @@ Item {
     }
 
     function getRooms() {
-      const url = "https://"+serverUrlField.text.trim()+"/rooms";
+      const url = "https://" + serverUrlField.text.trim() + "/rooms";
       let request = new XMLHttpRequest();
 
-      request.onreadystatechange = function() {
+      request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
           let responseArray = JSON.parse(request.response)
-          console.log(responseArray);
-          console.log(request.response);
           serverRoomComboBox.model = responseArray;
         }
       }
@@ -264,12 +262,12 @@ Item {
                   wrapMode: Text.WordWrap
                   text: {
                     switch (historyType) {
-                    case plugin.qchat_message_type_text:
-                      return "<i>" + qsTr("%1 said").arg(historyData.author) + "</i>";
-                    case plugin.qchat_message_type_image:
-                      return "<i>" + qsTr("%1 sent an image").arg(historyData.author) + "</i>";
-                    case plugin.qchat_message_type_bbox:
-                      return "<i>" + qsTr("%1 sent an extent").arg(historyData.author) + "</i>";
+                      case plugin.qchat_message_type_text:
+                        return "<i>" + qsTr("%1 said").arg(historyData.author) + "</i>";
+                      case plugin.qchat_message_type_image:
+                        return "<i>" + qsTr("%1 sent an image").arg(historyData.author) + "</i>";
+                      case plugin.qchat_message_type_bbox:
+                        return "<i>" + qsTr("%1 sent an extent").arg(historyData.author) + "</i>";
                     }
                     return "";
                   }
@@ -347,7 +345,7 @@ Item {
 
             onClicked: {
               if (messageInput.text !== "") {
-                const event = JSON.stringify({"type": plugin.qchat_message_type_text, "author": qchatSettings.lastUserName, "avatar": "", "text": messageInput.text})
+                const event = JSON.stringify({ "type": plugin.qchat_message_type_text, "author": qchatSettings.lastUserName, "avatar": "", "text": messageInput.text })
                 ws.sendTextMessage(event);
                 messageInput.text = "";
               }
@@ -361,7 +359,7 @@ Item {
             bgcolor: "transparent"
 
             onClicked: {
-              mapCanvas.grabToImage(function(result) {
+              mapCanvas.grabToImage(function (result) {
                 grabImage.source = result.url
               });
             }
@@ -393,7 +391,7 @@ Item {
     standardButtons: Dialog.Ok | Dialog.Close
 
     onAccepted: {
-      const event = JSON.stringify({"type": plugin.qchat_message_type_exiter, "exiter": qchatSettings.lastUserName})
+      const event = JSON.stringify({ "type": plugin.qchat_message_type_exiter, "exiter": qchatSettings.lastUserName })
       ws.sendTextMessage(event);
       ws.active = false
       historyModel.clear()
@@ -426,29 +424,27 @@ Item {
     }
 
     onStatusChanged: (status) => {
-                       if (status === WebSocket.Open) {
-                           const event = JSON.stringify({"type": plugin.qchat_message_type_newcomer, "newcomer": qchatSettings.lastUserName})
-                           sendTextMessage(event);
-                         }
-                       }
+      if (status === WebSocket.Open) {
+        const event = JSON.stringify({ "type": plugin.qchat_message_type_newcomer, "newcomer": qchatSettings.lastUserName })
+        sendTextMessage(event);
+      }
+    }
 
     onTextMessageReceived: (message) => {
-                             const event = JSON.parse(message);
-                             console.log(event.type);
-                             switch (event.type) {
-                               case plugin.qchat_message_type_text:
-                               case plugin.qchat_message_type_image:
-                               case plugin.qchat_message_type_bbox:
-                                 historyModel.append({"historyType": event.type, "historyData": event});
-                                 break;
-                               case plugin.qchat_message_type_nb_users:
-                                 detailsDialog.title = "<b>#" + qchatSettings.lastRoom + "</b>, " + qsTr("%n user(s)", "", event.nb_users) + " - QChat";
-                                 break;
-                               default:
-                                 console.log(message);
-                                 break;
-                             }
-                           }
+      const event = JSON.parse(message);
+      switch (event.type) {
+        case plugin.qchat_message_type_text:
+        case plugin.qchat_message_type_image:
+        case plugin.qchat_message_type_bbox:
+          historyModel.append({ "historyType": event.type, "historyData": event });
+          break;
+        case plugin.qchat_message_type_nb_users:
+          detailsDialog.title = "<b>#" + qchatSettings.lastRoom + "</b>, " + qsTr("%n user(s)", "", event.nb_users) + " - QChat";
+          break;
+        default:
+          break;
+      }
+    }
   }
 
   Image {
@@ -461,7 +457,7 @@ Item {
         let ctx = grabCanvas.getContext("2d");
         ctx.drawImage(grabImage, 0, 0);
 
-        const event = JSON.stringify({"type": plugin.qchat_message_type_image, "author": qchatSettings.lastUserName, "avatar": "", "image_data": grabCanvas.toDataURL("image/png").substring(22)})
+        const event = JSON.stringify({ "type": plugin.qchat_message_type_image, "author": qchatSettings.lastUserName, "avatar": "", "image_data": grabCanvas.toDataURL("image/png").substring(22) })
         ws.sendTextMessage(event);
       }
     }
