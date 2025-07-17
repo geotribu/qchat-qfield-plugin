@@ -25,6 +25,13 @@ https://github.com/geotribu/qchat-qfield-plugin/releases/latest/download/qfchat-
 pre-commit install
 ```
 
+- Install Qt dev tools e.g. for being able to use `qmllint`:
+
+```sh
+apt install qttools5-dev-tools
+apt install qt6-tools-dev
+```
+
 ----
 
 Shout out to @nirvn, the initiator of this QField plugin. Thanks for the amazing work !

@@ -1,7 +1,7 @@
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
-    hooks:
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v5.0.0
+      hooks:
         - id: check-added-large-files
         - id: check-case-conflict
         - id: check-yaml
@@ -9,3 +9,11 @@ repos:
         - id: end-of-file-fixer
         - id: no-commit-to-branch
         - id: trailing-whitespace
+
+    - repo: local
+      hooks:
+      - id: qmllint
+        name: QML Linter (qmllint)
+        entry: bash -c 'for file in "$@"; do echo "linting $file..."; qmllint "$file"; done' _
+        language: system
+        files: \.qml$
