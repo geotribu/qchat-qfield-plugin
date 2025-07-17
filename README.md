@@ -12,7 +12,7 @@ You can follow [the QField documentation](https://docs.qfield.org/how-to/plugins
 The URL to install the `QChat` plugin is:
 
 ```
-https://github.com/geotribu/qchat-qfield-plugin/releases/latest/download/qfield-plugin-qchat.zip
+https://github.com/geotribu/qchat-qfield-plugin/releases/latest/download/qfchat-latest.zip
 ```
 
 ----
