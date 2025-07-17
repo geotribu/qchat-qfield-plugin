@@ -2,6 +2,6 @@
 name=QfTribu
 description=Keep in touch with your GIS Tribe in the field!
 author=OPENGIS.ch
-icon=geotribu.png
+icon=resources/img/geotribu.svg
 version=1.0
 homepage=https://github.com/geotribu/qtribu

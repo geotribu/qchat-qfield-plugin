@@ -17,15 +17,15 @@ Item {
 
   Settings {
     id: qchatSettings
-    property string lastUrl: 'gischat.geotribu.net'//wss://gischat.geotribu.net/room/QGIS/ws'
-    property string lastRoom: 'QGIS'
-    property string lastUserName: 'Geotribu'
+    property string lastUrl: "qchat.geotribu.net" // -> wss://qchat.geotribu.net/channel/QGIS/ws'
+    property string lastChannel: "QGIS"
+    property string lastUserName: "jd_" + (Math.random * 10000)
   }
 
   Component.onCompleted: {
     userNameInput.text = qchatSettings.lastUserName
     serverUrlField.text = qchatSettings.lastUrl
-    serverRoomField.text = qchatSettings.lastRoom
+    serverChannelField.text = qchatSettings.lastChannel
 
     iface.addItemToPluginsToolbar(pluginButton)
   }
@@ -54,7 +54,7 @@ Item {
       Label {
         id: connectionLabel
         width: mainWindow.width - 60 < labelMetrics.width ? mainWindow.width - 60 : labelMetrics.width
-        text: qsTr("Pick a server, a room, and enter your user identifier below.")
+        text: qsTr("Pick a server, a channel, and enter your user identifier below.")
         wrapMode: Text.WordWrap
         font: Theme.defaultFont
         color: Theme.mainTextColor
@@ -67,7 +67,7 @@ Item {
         editable: true
         enabled: ws.status == WebSocket.Closed
         model: {
-          let servers = ['gischat.geotribu.net', 'gischat.geotribu.fr']
+          let servers = ["qchat.geotribu.net"]
           if (qchatSettings.lastUrl != "" && servers.indexOf(qchatSettings.lastUrl) < 0) {
             servers.push(qchatSettings.lastUrl)
           }
@@ -84,7 +84,7 @@ Item {
           placeholderText: qsTr("Server")
 
           onTextChanged: {
-            getRoomsTimer.restart();
+            getChannelsTimer.restart();
           }
         }
 
@@ -94,7 +94,7 @@ Item {
 
         Component.onCompleted: {
           currentIndex = find(qchatSettings.lastUrl);
-          getRoomsTimer.restart();
+          getChannelsTimer.restart();
         }
 
         onModelChanged: {
@@ -107,7 +107,7 @@ Item {
       }
 
       ComboBox {
-        id: serverRoomComboBox
+        id: serverChannelComboBox
         width: connectionLabel.width
         font: Theme.defaultFont
         editable: true
@@ -115,13 +115,13 @@ Item {
         model: []
 
         contentItem: TextField {
-          id: serverRoomField
+          id: serverChannelField
 
           inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase
           enabled: ws.status == WebSocket.Closed
           font: Theme.defaultFont
           text: parent.displayText
-          placeholderText: qsTr("Room")
+          placeholderText: qsTr("Channel")
         }
 
         background: Rectangle {
@@ -129,15 +129,15 @@ Item {
         }
 
         Component.onCompleted: {
-          currentIndex = find(qchatSettings.lastRoom);
+          currentIndex = find(qchatSettings.lastChannel);
         }
 
         onModelChanged: {
-          currentIndex = find(qchatSettings.lastRoom);
+          currentIndex = find(qchatSettings.lastChannel);
         }
 
         onDisplayTextChanged: {
-          serverRoomField.text = displayText;
+          serverChannelField.text = displayText;
         }
       }
 
@@ -154,11 +154,11 @@ Item {
 
     onAccepted: {
       ws.active = false
-      ws.url = "wss://" + serverUrlField.text.trim() + "/room/" + serverRoomField.text.trim() + "/ws"
+      ws.url = "wss://" + serverUrlField.text.trim() + "/channel/" + serverChannelField.text.trim() + "/ws"
       ws.active = true
 
       qchatSettings.lastUserName = userNameInput.text.trim()
-      qchatSettings.lastRoom = serverRoomField.text.trim()
+      qchatSettings.lastChannel = serverChannelField.text.trim()
       qchatSettings.lastUrl = serverUrlField.text.trim()
     }
 
@@ -167,24 +167,24 @@ Item {
     }
 
     Timer {
-      id: getRoomsTimer
+      id: getChannelsTimer
       interval: 500
       repeat: false
       running: false
 
       onTriggered: {
-        connectionDialog.getRooms();
+        connectionDialog.getChannels();
       }
     }
 
-    function getRooms() {
-      const url = "https://" + serverUrlField.text.trim() + "/rooms";
+    function getChannels() {
+      const url = "https://" + serverUrlField.text.trim() + "/channels";
       let request = new XMLHttpRequest();
 
       request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
           let responseArray = JSON.parse(request.response)
-          serverRoomComboBox.model = responseArray;
+          serverChannelComboBox.model = responseArray;
         }
       }
 
@@ -439,7 +439,7 @@ Item {
           historyModel.append({ "historyType": event.type, "historyData": event });
           break;
         case plugin.qchat_message_type_nb_users:
-          detailsDialog.title = "<b>#" + qchatSettings.lastRoom + "</b>, " + qsTr("%n user(s)", "", event.nb_users) + " - QChat";
+          detailsDialog.title = "<b>#" + qchatSettings.lastChannel + "</b>, " + qsTr("%n user(s)", "", event.nb_users) + " - QChat";
           break;
         default:
           break;
@@ -475,7 +475,7 @@ Item {
 
   QfToolButtonDrawer {
     id: pluginButton
-    iconSource: Qt.resolvedUrl("resources/img/geotribu.png")
+    iconSource: Qt.resolvedUrl("resources/img/geotribu.svg")
     iconColor: "transparent"
     bgcolor: Theme.darkGray
     round: true
