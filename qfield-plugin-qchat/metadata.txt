@@ -1,7 +1,7 @@
 [general]
-name=QfTribu
-description=Keep in touch with your GIS Tribe in the field!
-author=OPENGIS.ch
+name=QfChat
+description=Let's chat with your fellow GIS mates in the field!
+author=OPENGIS.ch x Geotribu
 icon=resources/img/geotribu.svg
-version=1.0
-homepage=https://github.com/geotribu/qtribu
+version=1.1
+homepage=https://github.com/geotribu/qchat-qfield-plugin

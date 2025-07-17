@@ -2,8 +2,9 @@
 
 QChat client in QField, let's chat with your GIS tribe on the field !
 
-- See [QTribu](https://github.com/geotribu/qtribu): QGIS plugin and QChat client in QGIS
-- QChat client compatible with [gischat backend](https://github.com/geotribu/gischat)
+- See [QChat](https://github.com/geotribu/qchat): QGIS plugin and QChat client in QGIS.
+- QChat client compatible with [the gischat backend](https://github.com/geotribu/gischat).
+- QField users can target the `qchat.geotribu.net` instance, or the `staging.gischat.geotribu.net` staging instance.
 
 ## Installation
 
