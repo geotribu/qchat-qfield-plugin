@@ -185,8 +185,8 @@ Item {
                     leftPadding: 4
 
                     Image {
-                        width: 20
-                        height: 20
+                        width: 16
+                        height: 16
                         anchors.verticalCenter: parent.verticalCenter
                         source: avatarComboBox.currentIndex >= 0 ? Qt.resolvedUrl("resources/img/avatars/") + qchatAvatarChoices[avatarComboBox.currentIndex].value : ""
                         fillMode: Image.PreserveAspectFit
