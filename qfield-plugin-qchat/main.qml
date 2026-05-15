@@ -491,6 +491,7 @@ Item {
             ws.sendTextMessage(event);
             ws.active = false;
             historyModel.clear();
+            connectionDialog.open();
         }
 
         Component.onCompleted: {
