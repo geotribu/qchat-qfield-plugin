@@ -20,6 +20,7 @@ Item {
         property string lastUrl: "qchat.geotribu.net" // -> wss://qchat.geotribu.net/channel/QGIS/ws'
         property string lastChannel: "QGIS"
         property string lastUserName: "jd_" + (Math.random * 10000)
+        property string lastAvatar: "mIconXyz.svg"
     }
 
     Component.onCompleted: {
@@ -146,7 +147,39 @@ Item {
                 width: connectionLabel.width
                 font: Theme.defaultFont
                 enabled: ws.status == WebSocket.Closed
-                placeholderText: "User name"
+                placeholderText: qsTr("User name")
+            }
+
+            ComboBox {
+                id: avatarComboBox
+                width: connectionLabel.width
+                font: Theme.defaultFont
+                enabled: ws.status == WebSocket.Closed
+
+                model: qchatAvatarChoices.map(a => a.label)
+
+                contentItem: TextField {
+                    id: avatarField
+
+                    inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase
+                    enabled: ws.status == WebSocket.Closed
+                    font: Theme.defaultFont
+                    text: parent.displayText
+                    placeholderText: qsTr("Avatar")
+                }
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                Component.onCompleted: {
+                    for (let i = 0; i < qchatAvatarChoices.length; i++) {
+                        if (qchatAvatarChoices[i].value === qchatSettings.lastAvatar) {
+                            currentIndex = i;
+                            break;
+                        }
+                    }
+                }
             }
         }
 
@@ -160,6 +193,7 @@ Item {
             qchatSettings.lastUserName = userNameInput.text.trim();
             qchatSettings.lastChannel = serverChannelField.text.trim();
             qchatSettings.lastUrl = serverUrlField.text.trim();
+            qchatSettings.lastAvatar = qchatAvatarChoices[avatarComboBox.currentIndex].value;
         }
 
         Component.onCompleted: {
@@ -262,11 +296,11 @@ Item {
                                     text: {
                                         switch (historyType) {
                                         case plugin.qchat_message_type_text:
-                                            return "<i>" + qsTr("%1 said").arg(historyData.author) + "</i>";
+                                            return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
                                         case plugin.qchat_message_type_image:
-                                            return "<i>" + qsTr("%1 sent an image").arg(historyData.author) + "</i>";
+                                            return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
                                         case plugin.qchat_message_type_bbox:
-                                            return "<i>" + qsTr("%1 sent an extent").arg(historyData.author) + "</i>";
+                                            return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
                                         }
                                         return "";
                                     }
@@ -347,7 +381,7 @@ Item {
                                 const event = JSON.stringify({
                                     "type": plugin.qchat_message_type_text,
                                     "author": qchatSettings.lastUserName,
-                                    "avatar": "",
+                                    "avatar": qchatSettings.lastAvatar,
                                     "text": messageInput.text
                                 });
                                 ws.sendTextMessage(event);
@@ -407,6 +441,99 @@ Item {
         Component.onCompleted: {
             standardButton(Dialog.Ok).text = "Disconnect";
         }
+    }
+
+    readonly property var qchatAvatarChoices: [
+        {
+            label: "Arrow Up",
+            value: "mActionArrowUp.svg"
+        },
+        {
+            label: "CAD",
+            value: "cadtools/cad.svg"
+        },
+        {
+            label: "Calculate",
+            value: "mActionCalculateField.svg"
+        },
+        {
+            label: "Camera",
+            value: "mIconCamera.svg"
+        },
+        {
+            label: "Certificate",
+            value: "mIconCertificate.svg"
+        },
+        {
+            label: "Comment",
+            value: "mIconInfo.svg"
+        },
+        {
+            label: "Compressed",
+            value: "mIconZip.svg"
+        },
+        {
+            label: "Folder",
+            value: "mIconFolder.svg"
+        },
+        {
+            label: "GeoPackage",
+            value: "mGeoPackage.svg"
+        },
+        {
+            label: "GPU",
+            value: "mIconGPU.svg"
+        },
+        {
+            label: "HTML",
+            value: "mActionAddHtml.svg"
+        },
+        {
+            label: "Information",
+            value: "mActionPropertiesWidget.svg"
+        },
+        {
+            label: "Network Logger",
+            value: "mIconNetworkLogger.svg"
+        },
+        {
+            label: "Postgis",
+            value: "mIconPostgis.svg"
+        },
+        {
+            label: "Python",
+            value: "mIconPythonFile.svg"
+        },
+        {
+            label: "Pyramid",
+            value: "mIconPyramid.svg"
+        },
+        {
+            label: "Raster",
+            value: "mIconRaster.svg"
+        },
+        {
+            label: "Spatialite",
+            value: "mIconSpatialite.svg"
+        },
+        {
+            label: "Tooltip",
+            value: "mActionMapTips.svg"
+        },
+        {
+            label: "XYZ",
+            value: "mIconXyz.svg"
+        }
+    ]
+
+    function avatarLabel(avatarValue) {
+        if (!avatarValue)
+            return "";
+        for (let i = 0; i < qchatAvatarChoices.length; i++) {
+            if (qchatAvatarChoices[i].value === avatarValue)
+                return qchatAvatarChoices[i].label;
+        }
+        return "XYZ";
     }
 
     readonly property string qchat_message_type_bbox: "bbox"
@@ -473,7 +600,7 @@ Item {
                 const event = JSON.stringify({
                     "type": plugin.qchat_message_type_image,
                     "author": qchatSettings.lastUserName,
-                    "avatar": "",
+                    "avatar": qchatSettings.lastAvatar,
                     "image_data": grabCanvas.toDataURL("image/png").substring(22)
                 });
                 ws.sendTextMessage(event);
