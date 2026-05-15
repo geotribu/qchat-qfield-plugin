@@ -41,6 +41,25 @@ Item {
         x: (mainWindow.width - width) / 2
         y: (mainWindow.height - height - 80) / 2
 
+        enter: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 0.0
+                to: 1.0
+                duration: 360
+                easing.type: Easing.OutCubic
+            }
+        }
+        exit: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 1.0
+                to: 0.0
+                duration: 160
+                easing.type: Easing.InCubic
+            }
+        }
+
         Column {
             width: childrenRect.width
             height: childrenRect.height
@@ -270,6 +289,25 @@ Item {
 
         x: (mainWindow.width - width) / 2
         y: (mainWindow.height - height - 80) / 2
+
+        enter: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 0.0
+                to: 1.0
+                duration: 360
+                easing.type: Easing.OutCubic
+            }
+        }
+        exit: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 1.0
+                to: 0.0
+                duration: 160
+                easing.type: Easing.InCubic
+            }
+        }
 
         onAboutToShow: {
             //swipe.currentIndex = 0;
