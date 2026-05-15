@@ -20,6 +20,7 @@ Item {
         property string lastUrl: "qchat.geotribu.net" // -> wss://qchat.geotribu.net/channel/QGIS/ws'
         property string lastChannel: "QGIS"
         property string lastUserName: "jd_" + (Math.random * 10000)
+        property string lastAvatar: "mIconXyz.svg"
     }
 
     Component.onCompleted: {
@@ -146,7 +147,73 @@ Item {
                 width: connectionLabel.width
                 font: Theme.defaultFont
                 enabled: ws.status == WebSocket.Closed
-                placeholderText: "User name"
+                placeholderText: qsTr("User name")
+            }
+
+            ComboBox {
+                id: avatarComboBox
+                width: connectionLabel.width
+                font: Theme.defaultFont
+                enabled: ws.status == WebSocket.Closed
+                model: qchatAvatarChoices
+                textRole: "label"
+
+                contentItem: Row {
+                    spacing: 6
+                    leftPadding: 4
+
+                    Image {
+                        width: 20
+                        height: 20
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: avatarComboBox.currentIndex >= 0 ? Qt.resolvedUrl("resources/img/avatars/") + qchatAvatarChoices[avatarComboBox.currentIndex].value : ""
+                        fillMode: Image.PreserveAspectFit
+                    }
+
+                    Label {
+                        anchors.verticalCenter: parent.verticalCenter
+                        font: Theme.defaultFont
+                        color: Theme.mainTextColor
+                        text: avatarComboBox.currentIndex >= 0 ? qchatAvatarChoices[avatarComboBox.currentIndex].label : ""
+                    }
+                }
+
+                delegate: ItemDelegate {
+                    width: avatarComboBox.width
+                    highlighted: avatarComboBox.highlightedIndex === index
+
+                    contentItem: Row {
+                        spacing: 6
+
+                        Image {
+                            width: 20
+                            height: 20
+                            anchors.verticalCenter: parent.verticalCenter
+                            source: Qt.resolvedUrl("resources/img/avatars/") + modelData.value
+                            fillMode: Image.PreserveAspectFit
+                        }
+
+                        Label {
+                            anchors.verticalCenter: parent.verticalCenter
+                            font: Theme.defaultFont
+                            color: highlighted ? Theme.mainColor : Theme.mainTextColor
+                            text: modelData.label
+                        }
+                    }
+                }
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                Component.onCompleted: {
+                    for (let i = 0; i < qchatAvatarChoices.length; i++) {
+                        if (qchatAvatarChoices[i].value === qchatSettings.lastAvatar) {
+                            currentIndex = i;
+                            break;
+                        }
+                    }
+                }
             }
         }
 
@@ -160,6 +227,7 @@ Item {
             qchatSettings.lastUserName = userNameInput.text.trim();
             qchatSettings.lastChannel = serverChannelField.text.trim();
             qchatSettings.lastUrl = serverUrlField.text.trim();
+            qchatSettings.lastAvatar = qchatAvatarChoices[avatarComboBox.currentIndex].value;
         }
 
         Component.onCompleted: {
@@ -254,21 +322,34 @@ Item {
                                 width: parent.width
                                 spacing: 2
 
-                                Label {
+                                Row {
                                     width: parent.width
-                                    font: Theme.tipFont
-                                    color: Theme.secondaryTextColor
-                                    wrapMode: Text.WordWrap
-                                    text: {
-                                        switch (historyType) {
-                                        case plugin.qchat_message_type_text:
-                                            return "<i>" + qsTr("%1 said").arg(historyData.author) + "</i>";
-                                        case plugin.qchat_message_type_image:
-                                            return "<i>" + qsTr("%1 sent an image").arg(historyData.author) + "</i>";
-                                        case plugin.qchat_message_type_bbox:
-                                            return "<i>" + qsTr("%1 sent an extent").arg(historyData.author) + "</i>";
+                                    spacing: 4
+
+                                    Image {
+                                        width: historyData.avatar ? 16 : 0
+                                        height: 16
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        source: historyData.avatar ? Qt.resolvedUrl("resources/img/avatars/") + historyData.avatar : ""
+                                        fillMode: Image.PreserveAspectFit
+                                    }
+
+                                    Label {
+                                        width: parent.width - (historyData.avatar ? 20 : 0)
+                                        font: Theme.tipFont
+                                        color: Theme.secondaryTextColor
+                                        wrapMode: Text.WordWrap
+                                        text: {
+                                            switch (historyType) {
+                                            case plugin.qchat_message_type_text:
+                                                return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
+                                            case plugin.qchat_message_type_image:
+                                                return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
+                                            case plugin.qchat_message_type_bbox:
+                                                return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
+                                            }
+                                            return "";
                                         }
-                                        return "";
                                     }
                                 }
 
@@ -328,10 +409,18 @@ Item {
                     width: parent.width
                     spacing: 10
 
+                    Image {
+                        width: 24
+                        height: 24
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: qchatSettings.lastAvatar ? Qt.resolvedUrl("resources/img/avatars/") + qchatSettings.lastAvatar : ""
+                        fillMode: Image.PreserveAspectFit
+                    }
+
                     TextField {
                         id: messageInput
                         anchors.verticalCenter: parent.verticalCenter
-                        width: parent.width - 116
+                        width: parent.width - 150
                         font: Theme.defaultFont
                         placeholderText: "Message content"
                     }
@@ -347,7 +436,7 @@ Item {
                                 const event = JSON.stringify({
                                     "type": plugin.qchat_message_type_text,
                                     "author": qchatSettings.lastUserName,
-                                    "avatar": "",
+                                    "avatar": qchatSettings.lastAvatar,
                                     "text": messageInput.text
                                 });
                                 ws.sendTextMessage(event);
@@ -407,6 +496,99 @@ Item {
         Component.onCompleted: {
             standardButton(Dialog.Ok).text = "Disconnect";
         }
+    }
+
+    readonly property var qchatAvatarChoices: [
+        {
+            label: "Arrow Up",
+            value: "mActionArrowUp.svg"
+        },
+        {
+            label: "CAD",
+            value: "cadtools/cad.svg"
+        },
+        {
+            label: "Calculate",
+            value: "mActionCalculateField.svg"
+        },
+        {
+            label: "Camera",
+            value: "mIconCamera.svg"
+        },
+        {
+            label: "Certificate",
+            value: "mIconCertificate.svg"
+        },
+        {
+            label: "Comment",
+            value: "mIconInfo.svg"
+        },
+        {
+            label: "Compressed",
+            value: "mIconZip.svg"
+        },
+        {
+            label: "Folder",
+            value: "mIconFolder.svg"
+        },
+        {
+            label: "GeoPackage",
+            value: "mGeoPackage.svg"
+        },
+        {
+            label: "GPU",
+            value: "mIconGPU.svg"
+        },
+        {
+            label: "HTML",
+            value: "mActionAddHtml.svg"
+        },
+        {
+            label: "Information",
+            value: "mActionPropertiesWidget.svg"
+        },
+        {
+            label: "Network Logger",
+            value: "mIconNetworkLogger.svg"
+        },
+        {
+            label: "Postgis",
+            value: "mIconPostgis.svg"
+        },
+        {
+            label: "Python",
+            value: "mIconPythonFile.svg"
+        },
+        {
+            label: "Pyramid",
+            value: "mIconPyramid.svg"
+        },
+        {
+            label: "Raster",
+            value: "mIconRaster.svg"
+        },
+        {
+            label: "Spatialite",
+            value: "mIconSpatialite.svg"
+        },
+        {
+            label: "Tooltip",
+            value: "mActionMapTips.svg"
+        },
+        {
+            label: "XYZ",
+            value: "mIconXyz.svg"
+        }
+    ]
+
+    function avatarLabel(avatarValue) {
+        if (!avatarValue)
+            return "";
+        for (let i = 0; i < qchatAvatarChoices.length; i++) {
+            if (qchatAvatarChoices[i].value === avatarValue)
+                return qchatAvatarChoices[i].label;
+        }
+        return "XYZ";
     }
 
     readonly property string qchat_message_type_bbox: "bbox"
@@ -473,7 +655,7 @@ Item {
                 const event = JSON.stringify({
                     "type": plugin.qchat_message_type_image,
                     "author": qchatSettings.lastUserName,
-                    "avatar": "",
+                    "avatar": qchatSettings.lastAvatar,
                     "image_data": grabCanvas.toDataURL("image/png").substring(22)
                 });
                 ws.sendTextMessage(event);
