@@ -284,7 +284,7 @@ Item {
     }
 
     Dialog {
-        id: detailsDialog
+        id: qchatMainDialog
         title: qsTr("QChat")
         focus: true
         font: Theme.defaultFont
@@ -529,7 +529,7 @@ Item {
                 DialogButtonBox.buttonRole: DialogButtonBox.ResetRole
                 onClicked: {
                     plugin.qchatMinimized = true;
-                    detailsDialog.close();
+                    qchatMainDialog.close();
                 }
             }
             Button {
@@ -574,7 +574,7 @@ Item {
 
         states: State {
             name: "shown"
-            when: plugin.qchatMinimized && !connectionDialog.visible && !detailsDialog.visible
+            when: plugin.qchatMinimized && !connectionDialog.visible && !qchatMainDialog.visible
             PropertyChanges {
                 target: minimizedBar
                 y: 14
@@ -651,7 +651,7 @@ Item {
             enabled: plugin.qchatMinimized
             onClicked: {
                 plugin.qchatMinimized = false;
-                detailsDialog.open();
+                qchatMainDialog.open();
             }
         }
     }
@@ -777,7 +777,7 @@ Item {
                     "newcomer": qchatSettings.lastUserName
                 });
                 sendTextMessage(event);
-                detailsDialog.open();
+                qchatMainDialog.open();
             }
         }
 
@@ -799,7 +799,7 @@ Item {
                 };
                 break;
             case plugin.qchat_message_type_nb_users:
-                detailsDialog.title = "<b>#" + qchatSettings.lastChannel + "</b>, " + qsTr("%n user(s)", "", event.nb_users) + " - QChat";
+                qchatMainDialog.title = "<b>#" + qchatSettings.lastChannel + "</b>, " + qsTr("%n user(s)", "", event.nb_users) + " - QChat";
                 break;
             default:
                 break;
@@ -858,7 +858,7 @@ Item {
                 if (ws.status != WebSocket.Open) {
                     connectionDialog.open();
                 } else {
-                    detailsDialog.open();
+                    qchatMainDialog.open();
                 }
             }
         }
