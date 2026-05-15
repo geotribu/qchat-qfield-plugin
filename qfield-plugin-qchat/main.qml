@@ -155,17 +155,51 @@ Item {
                 width: connectionLabel.width
                 font: Theme.defaultFont
                 enabled: ws.status == WebSocket.Closed
+                model: qchatAvatarChoices
+                textRole: "label"
 
-                model: qchatAvatarChoices.map(a => a.label)
+                contentItem: Row {
+                    spacing: 6
+                    leftPadding: 4
 
-                contentItem: TextField {
-                    id: avatarField
+                    Image {
+                        width: 20
+                        height: 20
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: avatarComboBox.currentIndex >= 0 ? Qt.resolvedUrl("resources/img/avatars/") + qchatAvatarChoices[avatarComboBox.currentIndex].value : ""
+                        fillMode: Image.PreserveAspectFit
+                    }
 
-                    inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase
-                    enabled: ws.status == WebSocket.Closed
-                    font: Theme.defaultFont
-                    text: parent.displayText
-                    placeholderText: qsTr("Avatar")
+                    Label {
+                        anchors.verticalCenter: parent.verticalCenter
+                        font: Theme.defaultFont
+                        color: Theme.mainTextColor
+                        text: avatarComboBox.currentIndex >= 0 ? qchatAvatarChoices[avatarComboBox.currentIndex].label : ""
+                    }
+                }
+
+                delegate: ItemDelegate {
+                    width: avatarComboBox.width
+                    highlighted: avatarComboBox.highlightedIndex === index
+
+                    contentItem: Row {
+                        spacing: 6
+
+                        Image {
+                            width: 20
+                            height: 20
+                            anchors.verticalCenter: parent.verticalCenter
+                            source: Qt.resolvedUrl("resources/img/avatars/") + modelData.value
+                            fillMode: Image.PreserveAspectFit
+                        }
+
+                        Label {
+                            anchors.verticalCenter: parent.verticalCenter
+                            font: Theme.defaultFont
+                            color: highlighted ? Theme.mainColor : Theme.mainTextColor
+                            text: modelData.label
+                        }
+                    }
                 }
 
                 background: Rectangle {
@@ -288,21 +322,34 @@ Item {
                                 width: parent.width
                                 spacing: 2
 
-                                Label {
+                                Row {
                                     width: parent.width
-                                    font: Theme.tipFont
-                                    color: Theme.secondaryTextColor
-                                    wrapMode: Text.WordWrap
-                                    text: {
-                                        switch (historyType) {
-                                        case plugin.qchat_message_type_text:
-                                            return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
-                                        case plugin.qchat_message_type_image:
-                                            return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
-                                        case plugin.qchat_message_type_bbox:
-                                            return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
+                                    spacing: 4
+
+                                    Image {
+                                        width: historyData.avatar ? 16 : 0
+                                        height: 16
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        source: historyData.avatar ? Qt.resolvedUrl("resources/img/avatars/") + historyData.avatar : ""
+                                        fillMode: Image.PreserveAspectFit
+                                    }
+
+                                    Label {
+                                        width: parent.width - (historyData.avatar ? 20 : 0)
+                                        font: Theme.tipFont
+                                        color: Theme.secondaryTextColor
+                                        wrapMode: Text.WordWrap
+                                        text: {
+                                            switch (historyType) {
+                                            case plugin.qchat_message_type_text:
+                                                return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
+                                            case plugin.qchat_message_type_image:
+                                                return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
+                                            case plugin.qchat_message_type_bbox:
+                                                return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
+                                            }
+                                            return "";
                                         }
-                                        return "";
                                     }
                                 }
 
@@ -362,10 +409,18 @@ Item {
                     width: parent.width
                     spacing: 10
 
+                    Image {
+                        width: 24
+                        height: 24
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: qchatSettings.lastAvatar ? Qt.resolvedUrl("resources/img/avatars/") + qchatSettings.lastAvatar : ""
+                        fillMode: Image.PreserveAspectFit
+                    }
+
                     TextField {
                         id: messageInput
                         anchors.verticalCenter: parent.verticalCenter
-                        width: parent.width - 116
+                        width: parent.width - 150
                         font: Theme.defaultFont
                         placeholderText: "Message content"
                     }
