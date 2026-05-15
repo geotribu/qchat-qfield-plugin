@@ -619,6 +619,7 @@ Item {
                     "newcomer": qchatSettings.lastUserName
                 });
                 sendTextMessage(event);
+                detailsDialog.open();
             }
         }
 
