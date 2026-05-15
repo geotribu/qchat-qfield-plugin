@@ -10,10 +10,16 @@ repos:
         - id: no-commit-to-branch
         - id: trailing-whitespace
 
-    - repo: local
+    - repo: https://github.com/tomas-krupa/qmlformat-hook.git
+      rev: 1.2.0
       hooks:
-      - id: qmllint
-        name: QML Linter (qmllint)
-        entry: bash -c 'for file in "$@"; do echo "linting $file..."; qmllint "$file"; done' _
-        language: system
-        files: \.qml$
+        - id: qmlformat
+
+# Specific part for https://pre-commit.ci
+ci:
+  autofix_commit_msg: "[pre-commit.ci] Automatic updates applied by git hooks."
+  autofix_prs: true
+  autoupdate_commit_msg: "[pre-commit.ci] Automatic updates applied by git hooks."
+  autoupdate_schedule: monthly
+  skip: []
+  submodules: false
