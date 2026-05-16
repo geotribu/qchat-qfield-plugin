@@ -568,16 +568,14 @@ Item {
         height: 44
         z: 100
         radius: height / 4
-        color: Theme.darkGray
         border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.14)
 
         states: State {
             name: "shown"
             when: plugin.qchatMinimized && !connectionDialog.visible && !qchatMainDialog.visible
             PropertyChanges {
                 target: minimizedBar
-                y: 14
+                y: 8
             }
         }
 
@@ -629,7 +627,6 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 width: parent.width - 30
                 font: Theme.defaultFont
-                color: "white"
                 elide: Text.ElideRight
                 text: {
                     const last_message = plugin.qchatLastMessage;
