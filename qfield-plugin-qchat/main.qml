@@ -568,7 +568,9 @@ Item {
         height: 44
         z: 1
         radius: 8
+        color: Theme.mainBackgroundColor
         border.width: 1
+        border.color: Theme.mainColor
 
         states: State {
             name: "shown"
@@ -627,6 +629,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 width: parent.width - 30
                 font: Theme.defaultFont
+                color: Theme.mainTextColor
                 elide: Text.ElideRight
                 text: {
                     const last_message = plugin.qchatLastMessage;
