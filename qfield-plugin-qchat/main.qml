@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 import QtWebSockets
 import QtCore
 
@@ -604,18 +605,18 @@ Item {
             }
         ]
 
-        Row {
+        RowLayout {
             anchors {
                 fill: parent
                 leftMargin: 16
-                rightMargin: 16
+                rightMargin: 8
             }
             spacing: 8
 
             Image {
                 width: 16
                 height: 16
-                anchors.verticalCenter: parent.verticalCenter
+                Layout.alignment: Qt.AlignVCenter
                 source: {
                     const last_message = plugin.qchatLastMessage;
                     if (last_message && last_message.avatar)
@@ -626,8 +627,8 @@ Item {
             }
 
             Label {
-                anchors.verticalCenter: parent.verticalCenter
-                width: parent.width - 30
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter
                 font: Theme.defaultFont
                 color: Theme.mainTextColor
                 elide: Text.ElideRight
@@ -643,6 +644,16 @@ Item {
                         return (last_message.author || "") + ": [extent]";
                     return qsTr("QChat - no message");
                 }
+            }
+
+            QfToolButton {
+                Layout.alignment: Qt.AlignVCenter
+                width: 48
+                height: 48
+                round: true
+                iconSource: Qt.resolvedUrl("resources/img/chat.svg")
+                iconColor: Theme.mainTextColor
+                bgcolor: "transparent"
             }
         }
 
