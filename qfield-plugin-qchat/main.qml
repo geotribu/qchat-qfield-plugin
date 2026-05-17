@@ -562,12 +562,12 @@ Item {
         id: minimizedBar
         parent: mainWindow.contentItem
 
-        x: (mainWindow.width - width) / 2
-        y: -height - 8
-        width: Math.min(mainWindow.width - 32, 420)
+        x: 136
+        y: mainWindow.height + 8
+        width: mainWindow.width - 136 - 64
         height: 44
-        z: 100
-        radius: height / 4
+        z: 1
+        radius: 8
         border.width: 1
 
         states: State {
@@ -575,7 +575,7 @@ Item {
             when: plugin.qchatMinimized && !connectionDialog.visible && !qchatMainDialog.visible
             PropertyChanges {
                 target: minimizedBar
-                y: 8
+                y: plugin.mapCanvas.y + plugin.mapCanvas.height - minimizedBar.height - 8
             }
         }
 
