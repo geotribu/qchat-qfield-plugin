@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 import QtWebSockets
 import QtCore
 
@@ -14,6 +15,9 @@ Item {
 
     property var mainWindow: iface.mainWindow()
     property var mapCanvas: iface.mapCanvas()
+
+    property bool qchatMinimized: false
+    property var qchatLastMessage: null
 
     Settings {
         id: qchatSettings
@@ -40,6 +44,25 @@ Item {
 
         x: (mainWindow.width - width) / 2
         y: (mainWindow.height - height - 80) / 2
+
+        enter: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 0.0
+                to: 1.0
+                duration: 360
+                easing.type: Easing.OutCubic
+            }
+        }
+        exit: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 1.0
+                to: 0.0
+                duration: 160
+                easing.type: Easing.InCubic
+            }
+        }
 
         Column {
             width: childrenRect.width
@@ -163,8 +186,8 @@ Item {
                     leftPadding: 4
 
                     Image {
-                        width: 20
-                        height: 20
+                        width: 16
+                        height: 16
                         anchors.verticalCenter: parent.verticalCenter
                         source: avatarComboBox.currentIndex >= 0 ? Qt.resolvedUrl("resources/img/avatars/") + qchatAvatarChoices[avatarComboBox.currentIndex].value : ""
                         fillMode: Image.PreserveAspectFit
@@ -186,8 +209,8 @@ Item {
                         spacing: 6
 
                         Image {
-                            width: 20
-                            height: 20
+                            width: 16
+                            height: 16
                             anchors.verticalCenter: parent.verticalCenter
                             source: Qt.resolvedUrl("resources/img/avatars/") + modelData.value
                             fillMode: Image.PreserveAspectFit
@@ -262,7 +285,7 @@ Item {
     }
 
     Dialog {
-        id: detailsDialog
+        id: qchatMainDialog
         title: qsTr("QChat")
         focus: true
         font: Theme.defaultFont
@@ -270,6 +293,25 @@ Item {
 
         x: (mainWindow.width - width) / 2
         y: (mainWindow.height - height - 80) / 2
+
+        enter: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 0.0
+                to: 1.0
+                duration: 360
+                easing.type: Easing.OutCubic
+            }
+        }
+        exit: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 1.0
+                to: 0.0
+                duration: 160
+                easing.type: Easing.InCubic
+            }
+        }
 
         onAboutToShow: {
             //swipe.currentIndex = 0;
@@ -481,7 +523,27 @@ Item {
             }
         }
 
-        standardButtons: Dialog.Ok | Dialog.Close
+        footer: DialogButtonBox {
+            Button {
+                text: qsTr("Minimize")
+                flat: true
+                DialogButtonBox.buttonRole: DialogButtonBox.ResetRole
+                onClicked: {
+                    plugin.qchatMinimized = true;
+                    qchatMainDialog.close();
+                }
+            }
+            Button {
+                text: qsTr("Disconnect")
+                flat: true
+                DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+            }
+            Button {
+                text: qsTr("Close")
+                flat: true
+                DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
+            }
+        }
 
         onAccepted: {
             const event = JSON.stringify({
@@ -491,10 +553,117 @@ Item {
             ws.sendTextMessage(event);
             ws.active = false;
             historyModel.clear();
+            plugin.qchatMinimized = false;
+            plugin.qchatLastMessage = null;
+            connectionDialog.open();
+        }
+    }
+
+    Rectangle {
+        id: minimizedBar
+        parent: mainWindow.contentItem
+
+        x: 136
+        y: mainWindow.height + 8
+        width: mainWindow.width - 136 - 64
+        height: 44
+        z: 1
+        radius: 8
+        color: Theme.mainBackgroundColor
+        border.width: 1
+        border.color: Theme.mainColor
+
+        states: State {
+            name: "shown"
+            when: plugin.qchatMinimized && !connectionDialog.visible && !qchatMainDialog.visible
+            PropertyChanges {
+                target: minimizedBar
+                y: plugin.mapCanvas.y + plugin.mapCanvas.height - minimizedBar.height - 8
+            }
         }
 
-        Component.onCompleted: {
-            standardButton(Dialog.Ok).text = "Disconnect";
+        transitions: [
+            Transition {
+                from: ""
+                to: "shown"
+                NumberAnimation {
+                    property: "y"
+                    duration: 360
+                    easing.type: Easing.OutBack
+                    easing.overshoot: 1.1
+                }
+            },
+            Transition {
+                from: "shown"
+                to: ""
+                NumberAnimation {
+                    property: "y"
+                    duration: 200
+                    easing.type: Easing.InBack
+                    easing.overshoot: 0.8
+                }
+            }
+        ]
+
+        RowLayout {
+            anchors {
+                fill: parent
+                leftMargin: 16
+                rightMargin: 8
+            }
+            spacing: 8
+
+            Image {
+                width: 16
+                height: 16
+                Layout.alignment: Qt.AlignVCenter
+                source: {
+                    const last_message = plugin.qchatLastMessage;
+                    if (last_message && last_message.avatar)
+                        return Qt.resolvedUrl("resources/img/avatars/") + last_message.avatar;
+                    return "";
+                }
+                fillMode: Image.PreserveAspectFit
+            }
+
+            Label {
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter
+                font: Theme.defaultFont
+                color: Theme.mainTextColor
+                elide: Text.ElideRight
+                text: {
+                    const last_message = plugin.qchatLastMessage;
+                    if (!last_message)
+                        return qsTr("QChat");
+                    if (last_message.type === plugin.qchat_message_type_image)
+                        return (last_message.author || "") + ": " + qsTr("[image sent]");
+                    if (last_message.type === plugin.qchat_message_type_text)
+                        return (last_message.author || "") + ": " + (last_message.text || "");
+                    if (last_message.type === plugin.qchat_message_type_bbox)
+                        return (last_message.author || "") + ": [extent]";
+                    return qsTr("QChat - no message");
+                }
+            }
+
+            QfToolButton {
+                Layout.alignment: Qt.AlignVCenter
+                width: 48
+                height: 48
+                round: true
+                iconSource: Qt.resolvedUrl("resources/img/chat.svg")
+                iconColor: Theme.mainTextColor
+                bgcolor: "transparent"
+            }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            enabled: plugin.qchatMinimized
+            onClicked: {
+                plugin.qchatMinimized = false;
+                qchatMainDialog.open();
+            }
         }
     }
 
@@ -619,6 +788,7 @@ Item {
                     "newcomer": qchatSettings.lastUserName
                 });
                 sendTextMessage(event);
+                qchatMainDialog.open();
             }
         }
 
@@ -632,9 +802,15 @@ Item {
                     "historyType": event.type,
                     "historyData": event
                 });
+                plugin.qchatLastMessage = {
+                    "type": event.type,
+                    "author": event.author || "",
+                    "avatar": event.avatar || "",
+                    "text": event.text || ""
+                };
                 break;
             case plugin.qchat_message_type_nb_users:
-                detailsDialog.title = "<b>#" + qchatSettings.lastChannel + "</b>, " + qsTr("%n user(s)", "", event.nb_users) + " - QChat";
+                qchatMainDialog.title = "<b>#" + qchatSettings.lastChannel + "</b>, " + qsTr("%n user(s)", "", event.nb_users) + " - QChat";
                 break;
             default:
                 break;
@@ -693,7 +869,7 @@ Item {
                 if (ws.status != WebSocket.Open) {
                     connectionDialog.open();
                 } else {
-                    detailsDialog.open();
+                    qchatMainDialog.open();
                 }
             }
         }
