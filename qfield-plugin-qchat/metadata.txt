@@ -2,6 +2,6 @@
 name=QfChat
 description=Let's chat with your fellow GIS mates in the field!
 author=OPENGIS.ch x Geotribu
-icon=resources/img/geotribu.svg
-version=1.1
+icon=resources/img/qchat.svg
+version=1.2
 homepage=https://github.com/geotribu/qchat-qfield-plugin
