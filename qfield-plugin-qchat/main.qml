@@ -851,7 +851,7 @@ Item {
 
     QfToolButtonDrawer {
         id: pluginButton
-        iconSource: Qt.resolvedUrl("resources/img/geotribu.svg")
+        iconSource: Qt.resolvedUrl("resources/img/qchat.svg")
         iconColor: "transparent"
         bgcolor: Theme.darkGray
         round: true
