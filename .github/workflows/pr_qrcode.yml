@@ -1,0 +1,138 @@
+name: ⛶ Zip & QR Code
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
+
+jobs:
+  zip-and-qr:
+    runs-on: ubuntu-latest
+    if: github.event.action != 'closed'
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Configure variables used later in the workflow
+        id: config
+        run: |
+          DIRECTORY="qfield-plugin-qchat"
+          ZIP_NAME="qfchat-pr-${{ github.event.pull_request.number }}-${{ github.sha }}.zip"
+          TAG_NAME="pr-${{ github.event.pull_request.number }}-${{ github.sha }}"
+          TAG_PREFIX="pr-${{ github.event.pull_request.number }}-"
+          echo "directory=$DIRECTORY" >> $GITHUB_OUTPUT
+          echo "zip_name=$ZIP_NAME" >> $GITHUB_OUTPUT
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "tag_prefix=$TAG_PREFIX" >> $GITHUB_OUTPUT
+          echo "sha_short=${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT
+
+      - name: Delete previous pre-releases for this PR
+        uses: actions/github-script@v9
+        env:
+          TAG_PREFIX: ${{ steps.config.outputs.tag_prefix }}
+        with:
+          script: |
+            const script = require('./.github/scripts/delete-pr-prereleases.js')
+            await script({ github, context })
+
+      - name: Zip the QField plugin
+        run: |
+          cd ${{ steps.config.outputs.directory }}
+          zip -r "../${{ steps.config.outputs.zip_name }}" ./*
+
+      - name: Create pre-release with the ZIP
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.config.outputs.tag_name }}
+          name: "PR #${{ github.event.pull_request.number }} - qfield-plugin-qchat"
+          prerelease: true
+          files: |
+            ${{ steps.config.outputs.zip_name }}
+            qrcode.png
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate QR code
+        run: |
+          pip install qrcode[pil] --quiet
+          python3 .github/scripts/generate_qr_code.py
+        env:
+          FILE_URL: https://github.com/${{ github.repository }}/releases/download/${{ steps.config.outputs.tag_name }}/${{ steps.config.outputs.zip_name }}
+
+      - name: Find existing bot comment
+        uses: peter-evans/find-comment@v4
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: github-actions[bot]
+          body-includes: ZIP artefact generated
+
+      - name: Create or update comment on the Pull Request
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          body: |
+            ## 📦 ZIP artefact generated
+
+            | Info | Value |
+            |------|-------|
+            | 📁 Directory | `${{ steps.config.outputs.directory }}` |
+            | 🗜️ File | `${{ steps.config.outputs.zip_name }}` |
+            | 🔑 Commit | `${{ steps.config.outputs.sha_short }}` |
+
+            ### 📥 Download
+            👉 [Download the ZIP directly](https://github.com/${{ github.repository }}/releases/download/${{ steps.config.outputs.tag_name }}/${{ steps.config.outputs.zip_name }})
+
+            ---
+
+            ### 📱 QR Code — Scan to download
+
+            <img src="https://github.com/${{ github.repository }}/releases/download/${{ steps.config.outputs.tag_name }}/qrcode.png" alt="QR Code" width="360"/>
+
+  cleanup:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'closed'
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Delete all pre-releases for this PR
+        uses: actions/github-script@v9
+        env:
+          TAG_PREFIX: pr-${{ github.event.pull_request.number }}-
+        with:
+          script: |
+            const script = require('./.github/scripts/delete-pr-prereleases.js')
+            await script({ github, context })
+
+      - name: Find bot comment
+        uses: peter-evans/find-comment@v4
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: github-actions[bot]
+          body-includes: ZIP artefact generated
+
+      - name: Delete bot comment
+        if: steps.find-comment.outputs.comment-id != ''
+        uses: actions/github-script@v9
+        env:
+          COMMENT_ID: ${{ steps.find-comment.outputs.comment-id }}
+        with:
+          script: |
+            const script = require('./.github/scripts/delete-bot-comment.js')
+            await script({ github, context })
