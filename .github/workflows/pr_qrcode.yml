@@ -95,7 +95,7 @@ jobs:
 
             ---
 
-            ### 📱 QR Code — Scan to download
+            ### 📱 QR Code — Flash in QField to test
 
             <img src="https://github.com/${{ github.repository }}/releases/download/${{ steps.config.outputs.tag_name }}/qrcode.png" alt="QR Code" width="360"/>
 
