@@ -49,7 +49,14 @@ jobs:
           cd ${{ steps.config.outputs.directory }}
           zip -r "../${{ steps.config.outputs.zip_name }}" ./*
 
-      - name: Create pre-release with the ZIP
+      - name: Generate QR code
+        run: |
+          pip install qrcode[pil] --quiet
+          python3 .github/scripts/generate_qr_code.py
+        env:
+          FILE_URL: https://github.com/${{ github.repository }}/releases/download/${{ steps.config.outputs.tag_name }}/${{ steps.config.outputs.zip_name }}
+
+      - name: Create pre-release with the ZIP and the QR code
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.config.outputs.tag_name }}
@@ -59,13 +66,6 @@ jobs:
             ${{ steps.config.outputs.zip_name }}
             qrcode.png
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Generate QR code
-        run: |
-          pip install qrcode[pil] --quiet
-          python3 .github/scripts/generate_qr_code.py
-        env:
-          FILE_URL: https://github.com/${{ github.repository }}/releases/download/${{ steps.config.outputs.tag_name }}/${{ steps.config.outputs.zip_name }}
 
       - name: Find existing bot comment
         uses: peter-evans/find-comment@v4
