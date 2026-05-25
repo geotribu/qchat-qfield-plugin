@@ -581,7 +581,7 @@ Item {
         function getBottomMargin() {
             const osNavBarHeight = mainWindow.sceneBottomMargin;
             const featureForm = iface.findItemByObjectName("featureForm");
-            if (!featureForm) {
+            if (!featureForm.visible) {
                 return osNavBarHeight + 10;
             }
             return parent.height - featureForm.y + 10;
