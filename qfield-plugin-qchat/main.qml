@@ -584,7 +584,7 @@ Item {
             if (!featureForm) {
                 return osNavBarHeight + 10;
             }
-            return parent.height - featureForm.y + osNavBarHeight + 10;
+            return parent.height - featureForm.y + 10;
         }
 
         states: State {
