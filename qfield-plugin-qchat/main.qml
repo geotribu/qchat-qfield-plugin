@@ -579,11 +579,12 @@ Item {
         border.color: Theme.mainColor
 
         function getBottomMargin() {
+            const osNavBarHeight = mainWindow.sceneBottomMargin;
             const featureForm = iface.findItemByObjectName("featureForm");
             if (!featureForm) {
-                return 10;
+                return osNavBarHeight + 10;
             }
-            return parent.height - featureForm.y + 10;
+            return parent.height - featureForm.y + osNavBarHeight + 10;
         }
 
         states: State {
