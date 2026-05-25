@@ -12,6 +12,7 @@ on:
 
 jobs:
   zip-and-qr:
+    name: 📱 Generate ZIP and QR code for PR
     runs-on: ubuntu-latest
     if: github.event.action != 'closed'
     permissions:
@@ -100,6 +101,7 @@ jobs:
             <img src="https://github.com/${{ github.repository }}/releases/download/${{ steps.config.outputs.tag_name }}/qrcode.png" alt="QR Code" width="360"/>
 
   cleanup:
+    name: 🧹 Cleanup on PR close
     runs-on: ubuntu-latest
     if: github.event.action == 'closed'
     permissions:
