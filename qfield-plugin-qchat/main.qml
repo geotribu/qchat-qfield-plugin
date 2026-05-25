@@ -578,12 +578,20 @@ Item {
         border.width: 1
         border.color: Theme.mainColor
 
+        function getBottomMargin() {
+            const featureForm = iface.findItemByObjectName("featureForm");
+            if (!featureForm) {
+                return 10;
+            }
+            return parent.height - featureForm.y + 10;
+        }
+
         states: State {
             name: "shown"
             when: plugin.qchatMinimized && !connectionDialog.visible && !qchatMainDialog.visible
             PropertyChanges {
                 target: minimizedBar
-                anchors.bottomMargin: 10
+                anchors.bottomMargin: getBottomMargin()
             }
         }
 
