@@ -1,21 +1,29 @@
 repos:
-    - repo: https://github.com/pre-commit/pre-commit-hooks
-      rev: v6.0.0
-      hooks:
-        - id: check-added-large-files
-        - id: check-case-conflict
-        - id: check-yaml
-        - id: detect-private-key
-        - id: end-of-file-fixer
-        - id: no-commit-to-branch
-        - id: trailing-whitespace
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-yaml
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: no-commit-to-branch
+      - id: trailing-whitespace
 
-    - repo: https://github.com/tomas-krupa/qmlformat-hook.git
-      rev: 1.2.0
-      hooks:
-        - id: qmlformat
-          additional_dependencies:
-            - PySide6-Essentials==6.10.2
+  - repo: https://github.com/tomas-krupa/qmlformat-hook.git
+    rev: 1.2.0
+    hooks:
+      - id: qmlformat
+        additional_dependencies:
+          - PySide6-Essentials==6.10.2
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.38.0
+    hooks:
+      - id: yamllint
+        args:
+          - --config-file
+          - .yamllint.yaml
 
 # Specific part for https://pre-commit.ci
 ci:
