@@ -563,22 +563,36 @@ Item {
         id: minimizedBar
         parent: mainWindow.contentItem
 
-        x: 136
-        y: mainWindow.height + 8
-        width: mainWindow.width - 136 - 64
-        height: 44
+        visible: plugin.qchatMinimized && !connectionDialog.visible && !qchatMainDialog.visible
+
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.leftMargin: 88 + 10 // a bit of place for the scale widget
+        anchors.rightMargin: 48 + 10 // 48 = tool button size (location button) + 5 x 2 spacing
+        anchors.bottomMargin: -height // start below the canvas to make the transition smoother
+        height: 48 // tool button height
         z: 1
         radius: 8
         color: Theme.mainBackgroundColor
         border.width: 1
         border.color: Theme.mainColor
 
+        function getBottomMargin() {
+            const osNavBarHeight = mainWindow.sceneBottomMargin;
+            const featureForm = iface.findItemByObjectName("featureForm");
+            if (!featureForm.visible) {
+                return osNavBarHeight + 10;
+            }
+            return parent.height - featureForm.y + 10;
+        }
+
         states: State {
             name: "shown"
             when: plugin.qchatMinimized && !connectionDialog.visible && !qchatMainDialog.visible
             PropertyChanges {
                 target: minimizedBar
-                y: plugin.mapCanvas.y + plugin.mapCanvas.height - minimizedBar.height - 8
+                anchors.bottomMargin: getBottomMargin()
             }
         }
 
@@ -587,7 +601,7 @@ Item {
                 from: ""
                 to: "shown"
                 NumberAnimation {
-                    property: "y"
+                    property: "anchors.bottomMargin"
                     duration: 360
                     easing.type: Easing.OutBack
                     easing.overshoot: 1.1
@@ -597,7 +611,7 @@ Item {
                 from: "shown"
                 to: ""
                 NumberAnimation {
-                    property: "y"
+                    property: "anchors.bottomMargin"
                     duration: 200
                     easing.type: Easing.InBack
                     easing.overshoot: 0.8
