@@ -9,6 +9,10 @@ on:
       - synchronize
       - reopened
       - closed
+    paths:
+      - 'qfield-plugin-qchat/**'
+      - '.github/workflows/pr_qrcode.yml'
+      - '.github/scripts/**'
 
 jobs:
   zip-and-qr:
@@ -96,7 +100,7 @@ jobs:
 
             ---
 
-            ### 📱 QR Code — Flash in QField to test
+            ### 📱 QR Code: Flash in QField to test
 
             <img src="https://github.com/${{ github.repository }}/releases/download/${{ steps.config.outputs.tag_name }}/qrcode.png" alt="QR Code" width="360"/>
 
