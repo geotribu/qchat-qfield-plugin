@@ -785,6 +785,8 @@ Item {
     readonly property string qchat_message_type_text: "text"
     readonly property string qchat_message_type_uncompliant: "uncompliant"
 
+    readonly property var qchat_cheatcodes: ["givemesomecheese", "lookattheflickofqgis", "iamarobot", "its10oclock", "qgisprolicense", "wizz", "spaceandtime",]
+
     WebSocket {
         id: ws
         active: false
@@ -806,10 +808,31 @@ Item {
             }
         }
 
+        function handleCheatCode(message) {
+            switch (message.text) {
+            case "qgisprolicense":
+                mainWindow.displayToast(qsTr("Your QField pro license is about to expire. Consider renewing it !"));
+                break;
+            case "wizz":
+                // make the device vibrate for 1 second
+                platformUtilities.vibrate(1000);
+                break;
+            default:
+                break;
+            }
+        }
+
         onTextMessageReceived: message => {
             const event = JSON.parse(message);
             switch (event.type) {
             case plugin.qchat_message_type_text:
+                if (plugin.qchat_cheatcodes.includes(event.text)) {
+                    handleCheatCode(event);
+                    break;
+                }
+                if (event.text.includes("@" + qchatSettings.lastUserName) || event.text.includes("@all")) {
+                    mainWindow.displayToast(qsTr("QChat mention by %1: '%2'").arg(event.author).arg(event.text));
+                }
             case plugin.qchat_message_type_image:
             case plugin.qchat_message_type_bbox:
                 historyModel.append({
