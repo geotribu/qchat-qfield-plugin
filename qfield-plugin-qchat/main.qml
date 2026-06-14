@@ -21,7 +21,7 @@ Item {
 
     Settings {
         id: qchatSettings
-        property string lastUrl: "qchat.geotribu.net" // -> wss://qchat.geotribu.net/channel/QGIS/ws'
+        property string lastUrl: "https://qchat.geotribu.net"
         property string lastChannel: "QGIS"
         property string lastUserName: "jd_" + (Math.random * 10000)
         property string lastAvatar: "mIconXyz.svg"
@@ -91,7 +91,7 @@ Item {
                 editable: true
                 enabled: ws.status == WebSocket.Closed
                 model: {
-                    let servers = ["qchat.geotribu.net"];
+                    let servers = ["https://qchat.geotribu.net"];
                     if (qchatSettings.lastUrl != "" && servers.indexOf(qchatSettings.lastUrl) < 0) {
                         servers.push(qchatSettings.lastUrl);
                     }
@@ -244,7 +244,9 @@ Item {
 
         onAccepted: {
             ws.active = false;
-            ws.url = "wss://" + serverUrlField.text.trim() + "/channel/" + serverChannelField.text.trim() + "/ws";
+            const websocketProtocol = serverUrlField.text.trim().startsWith("https") ? "wss" : "ws";
+            const serverUrl = serverUrlField.text.trim().replace("https://", "").replace("http://", "");
+            ws.url = websocketProtocol + "://" + serverUrl + "/channel/" + serverChannelField.text.trim() + "/ws";
             ws.active = true;
 
             qchatSettings.lastUserName = userNameInput.text.trim();
@@ -269,7 +271,7 @@ Item {
         }
 
         function getChannels() {
-            const url = "https://" + serverUrlField.text.trim() + "/channels";
+            const url = serverUrlField.text.trim() + "/channels";
             let request = new XMLHttpRequest();
 
             request.onreadystatechange = function () {
