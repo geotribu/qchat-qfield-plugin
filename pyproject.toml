@@ -1,0 +1,16 @@
+[project]
+name = "qchat-qfield-plugin"
+version = "1.3"
+description = "Python project for QChat QField plugin tests."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-qfield>=0.9.0",
+]
+
+# [tool.pytest.ini_options]
+# qt_api = "pyqt5"
