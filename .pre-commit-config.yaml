@@ -24,6 +24,35 @@ repos:
           - --config-file
           - .yamllint.yaml
 
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: "v0.15.18"
+    hooks:
+      - id: ruff
+        args:
+          - --fix
+          - --target-version=py312
+      - id: ruff-format
+        args:
+          - --line-length=88
+          - --target-version=py312
+
+  - repo: https://github.com/pycqa/isort
+    rev: 8.0.1
+    hooks:
+      - id: isort
+        args:
+          - --filter-files
+
+  - repo: local
+    hooks:
+      - id: prettier
+        name: prettier
+        language: node
+        entry: prettier --write
+        additional_dependencies:
+          - prettier@3.5.3
+        files: \.(js)$
+
 # Specific part for https://pre-commit.ci
 ci:
   autofix_commit_msg: "[pre-commit.ci] Automatic updates applied by git hooks."
