@@ -1,0 +1,45 @@
+name: 🎳 Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  tests:
+
+    name: 🤞 Run QField plugin unit tests
+    runs-on: ubuntu-latest
+
+    container:
+      image: qgis/qgis:${{ matrix.qgis-image-tag }}
+    strategy:
+      matrix:
+        qgis-image-tag:
+          - "4.0-questing"
+          - "4.0-trixie"
+      fail-fast: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Create venv with system site packages
+        run: uv venv --system-site-packages
+
+      - name: Add QGIS Python path
+        run: |
+          SITE_PACKAGES=$(uv run python -c "import site; print(site.getsitepackages()[0])")
+          echo "/usr/share/qgis/python" > "$SITE_PACKAGES/qgis.pth"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run tests
+        run: xvfb-run uv run pytest tests -v
