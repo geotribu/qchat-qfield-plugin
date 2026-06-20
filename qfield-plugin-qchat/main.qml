@@ -392,6 +392,8 @@ Item {
                                                 return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
                                             case plugin.qchat_message_type_bbox:
                                                 return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
+                                            case plugin.qchat_message_type_position:
+                                                return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
                                             }
                                             return "";
                                         }
@@ -435,7 +437,7 @@ Item {
                                     borderColor: Theme.mainTextColor
                                     color: Theme.mainTextColor
                                     bgcolor: "transparent"
-                                    text: qsTr("Zoom to extent")
+                                    text: qsTr("🔳 Zoom to extent")
 
                                     onClicked: {
                                         const wkt = "MULTIPOINT((" + historyData.xmin + " " + historyData.ymin + "),(" + historyData.xmax + " " + historyData.ymax + "))";
@@ -443,6 +445,22 @@ Item {
                                         const bbox = GeometryUtils.boundingBox(geom);
                                         const bboxCrs = CoordinateReferenceSystemUtils.fromDescription(historyData.crs_authid);
                                         mapCanvas.mapSettings.extent = GeometryUtils.reprojectRectangle(bbox, bboxCrs, mapCanvas.mapSettings.destinationCrs);
+                                    }
+                                }
+
+                                QfButton {
+                                    visible: historyType == plugin.qchat_message_type_position
+                                    width: parent.width
+                                    borderColor: Theme.mainTextColor
+                                    color: Theme.mainTextColor
+                                    bgcolor: "transparent"
+                                    text: qsTr("📍 Go to location")
+
+                                    onClicked: {
+                                        const point = GeometryUtils.point(historyData.x, historyData.y);
+                                        const crs = CoordinateReferenceSystemUtils.fromDescription(historyData.crs_authid);
+                                        const projectedPoint = GeometryUtils.reprojectPoint(point, crs, qgisProject.crs);
+                                        mapCanvas.mapSettings.center = projectedPoint;
                                     }
                                 }
                             }
@@ -659,6 +677,8 @@ Item {
                         return (last_message.author || "") + ": " + (last_message.text || "");
                     if (last_message.type === plugin.qchat_message_type_bbox)
                         return (last_message.author || "") + ": [extent]";
+                    if (last_message.type === plugin.qchat_message_type_position)
+                        return (last_message.author || "") + ": [location]";
                     return qsTr("QChat - no message");
                 }
             }
@@ -785,6 +805,7 @@ Item {
     readonly property string qchat_message_type_like: "like"
     readonly property string qchat_message_type_nb_users: "nb_users"
     readonly property string qchat_message_type_newcomer: "newcomer"
+    readonly property string qchat_message_type_position: "position"
     readonly property string qchat_message_type_text: "text"
     readonly property string qchat_message_type_uncompliant: "uncompliant"
 
@@ -837,6 +858,7 @@ Item {
                     mainWindow.displayToast(qsTr("QChat mention by %1: '%2'").arg(event.author).arg(event.text));
                 }
             case plugin.qchat_message_type_image:
+            case plugin.qchat_message_type_position:
             case plugin.qchat_message_type_bbox:
                 historyModel.append({
                     "historyType": event.type,
