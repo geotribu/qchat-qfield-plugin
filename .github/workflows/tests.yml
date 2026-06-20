@@ -27,6 +27,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Install PyQt6 system dependencies
+        run: apt install -y python3-pyqt6.qtqml python3-pyqt6.qtquick
+
       - name: Install uv
         uses: astral-sh/setup-uv@v7
 
