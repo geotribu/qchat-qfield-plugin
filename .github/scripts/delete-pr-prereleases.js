@@ -5,8 +5,12 @@ module.exports = async ({ github, context }) => {
     repo: context.repo.repo,
     per_page: 100,
   });
-  const toDelete = releases.filter(r => r.prerelease && r.tag_name.startsWith(prefix));
-  console.log(`${toDelete.length} pre-release(s) to delete with prefix "${prefix}"`);
+  const toDelete = releases.filter(
+    (r) => r.prerelease && r.tag_name.startsWith(prefix),
+  );
+  console.log(
+    `${toDelete.length} pre-release(s) to delete with prefix "${prefix}"`,
+  );
   for (const release of toDelete) {
     await github.rest.repos.deleteRelease({
       owner: context.repo.owner,

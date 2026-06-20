@@ -1,4 +1,5 @@
 import os
+
 import qrcode
 
 url = os.environ["FILE_URL"]
