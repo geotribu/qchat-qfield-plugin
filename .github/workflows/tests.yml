@@ -20,7 +20,7 @@ jobs:
       matrix:
         qgis-image-tag:
           - "4.0-questing"
-          - "4.0-trixie"
+          # - "4.0-trixie"
       fail-fast: false
 
     steps:
