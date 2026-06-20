@@ -78,10 +78,16 @@ uv run python -c "from PyQt6.QtCore import QT_VERSION_STR; print(QT_VERSION_STR)
 > [!NOTE]
 > Tested on Ubuntu 26.04, only...
 
+- Clone QField locally, e.g.:
+
+```sh
+git clone --depth 1 [--branch v4.2.3] https://github.com/opengisch/QField.git
+```
+
 - Run tests:
 
 ```sh
-uv run pytest tests -v
+uv run pytest tests -v --qgis_disable_gui
 ```
 
 ----

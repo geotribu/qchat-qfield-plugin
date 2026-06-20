@@ -25,14 +25,24 @@ jobs:
         qgis-image-tag:
           - "4.0-questing"
           # - "4.0-trixie"
+        qfield-refs:
+          - v4.2.3
+          - master
       fail-fast: false
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Checkout QField repository
+        uses: actions/checkout@v6
+        with:
+          repository: opengisch/QField
+          path: ./
+          ref: ${{ matrix.qfield-refs }}
+
       - name: Install PyQt6 system dependencies
-        run: apt install -y python3-pyqt6.qtqml python3-pyqt6.qtquick
+        run: apt install -y qt6-websockets-dev python3-pyqt6.qtqml python3-pyqt6.qtquick
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
@@ -48,5 +58,7 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
-      - name: Run tests
-        run: xvfb-run uv run pytest tests -v
+      - name: Run unit tests with pytest
+        env:
+          QGIS_IN_CI: 1
+        run: xvfb-run uv run pytest tests -v --qgis_disable_gui

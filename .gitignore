@@ -6,3 +6,6 @@ __pycache__
 
 # qgis related elements
 .qgis-settings/
+
+# qfield local clone
+QField/
