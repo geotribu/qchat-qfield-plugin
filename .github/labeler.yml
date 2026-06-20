@@ -1,0 +1,33 @@
+ci:
+  - head-branch:
+    - "^ci"
+    - "ci"
+  - changed-files:
+    - any-glob-to-any-file:
+      - .github/**
+
+documentation:
+  - head-branch:
+    - "^doc"
+    - "doc"
+  - changed-files:
+    - any-glob-to-any-file:
+      - docs/**
+      - README.md
+
+enhancement:
+  - head-branch:
+    - "^feature"
+    - "feature"
+    - "^feat"
+    - "feat"
+
+tooling:
+  - head-branch:
+    - "^tooling"
+    - "tooling"
+  - changed-files:
+    - any-glob-to-any-file:
+      - .gitignore
+      - .pre-commit-config.yaml
+      - .yamllint.yaml
