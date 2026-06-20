@@ -12,5 +12,11 @@ dev = [
     "pytest-qfield>=0.9.0",
 ]
 
-# [tool.pytest.ini_options]
-# qt_api = "pyqt5"
+[tool.pytest.ini_options]
+qt_api = "pyqt6"
+qfield_imports_dir = "tests/qfield_imports"
+
+[tool.uv]
+override-dependencies = [
+    "PyQt6; sys_platform == 'never'",
+]
