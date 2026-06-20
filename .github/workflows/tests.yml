@@ -7,6 +7,10 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - "qfield-plugin-qchat/main.qml"
+      - "tests/**"
+      - ".github/workflows/tests.yml"
 
 jobs:
   tests:
