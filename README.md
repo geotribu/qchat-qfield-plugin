@@ -42,6 +42,48 @@ pre-commit install
 
 - Install [the `QField Plugin Reloader` plugin](https://github.com/gacarrillor/qfield-plugin-reloader) for an easier reloading workflow.
 
+## Tests locally
+
+> [!NOTE]
+> QGIS4 must be installed on the test machine!
+
+- Install `uv` locally:
+
+```sh
+python3 -m pip install uv --break-system-packages
+```
+
+- Create local virtualenv with system packages and sync:
+
+```sh
+uv venv --system-site-packages
+uv sync
+```
+
+- Add system packages to local virtual env (hacky):
+
+```sh
+SITE_PACKAGES=$(uv run python -c "import site; print(site.getsitepackages()[0])")
+echo "/usr/share/qgis/python" > "$SITE_PACKAGES/qgis.pth"
+```
+
+- Test that imports are fine:
+
+```sh
+uv run python -c "import qgis; print(qgis.__file__)"
+uv run python -c "import PyQt6; print(PyQt6.__file__)"
+uv run python -c "from PyQt6.QtCore import QT_VERSION_STR; print(QT_VERSION_STR)"
+```
+
+> [!NOTE]
+> Tested on Ubuntu 26.04, only...
+
+- Run tests:
+
+```sh
+uv run pytest tests -v
+```
+
 ----
 
 Shout out to @nirvn, the initiator of this QField plugin. Thanks for the amazing work !
