@@ -12,6 +12,7 @@ import "qrc:/qml" as QFieldItems
 
 Item {
     id: plugin
+    objectName: "plugin"
 
     property var mainWindow: iface.mainWindow()
     property var mapCanvas: iface.mapCanvas()
@@ -890,12 +891,14 @@ Item {
 
     QfToolButtonDrawer {
         id: pluginButton
+        objectName: "pluginButton"
         iconSource: Qt.resolvedUrl("resources/img/qchat.svg")
         iconColor: "transparent"
         bgcolor: Theme.darkGray
         round: true
 
         QfToolButton {
+            objectName: "pluginQChatButton"
             iconSource: Qt.resolvedUrl("resources/img/chat.svg")
             iconColor: ws.status == WebSocket.Open ? Theme.mainColor : "white"
             bgcolor: Theme.darkGraySemiOpaque
@@ -914,6 +917,7 @@ Item {
         }
 
         QfToolButton {
+            objectName: "pluginNewsButton"
             iconSource: Qt.resolvedUrl("resources/img/news.svg")
             iconColor: "white"
             bgcolor: Theme.darkGraySemiOpaque

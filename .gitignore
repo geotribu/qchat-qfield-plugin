@@ -1,0 +1,11 @@
+# python related elements
+.venv
+.env
+venv
+__pycache__
+
+# qgis related elements
+.qgis-settings/
+
+# qfield local clone
+QField/
