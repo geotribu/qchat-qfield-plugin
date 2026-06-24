@@ -66,5 +66,7 @@ ci:
   autofix_prs: true
   autoupdate_commit_msg: "[pre-commit.ci] Automatic updates applied by git hooks."
   autoupdate_schedule: monthly
-  skip: []
+  skip: [
+    "qmlformat"
+  ]
   submodules: false
