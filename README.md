@@ -84,7 +84,7 @@ uv run python -c "from PyQt6.QtCore import QT_VERSION_STR; print(QT_VERSION_STR)
 - Clone QField locally, e.g.:
 
 ```sh
-git clone --depth 1 [--branch v4.2.3] https://github.com/opengisch/QField.git
+git clone --depth 1 [--branch release-4_2] https://github.com/opengisch/QField.git
 ```
 
 - Run tests:
