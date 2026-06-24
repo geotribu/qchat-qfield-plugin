@@ -4,9 +4,16 @@ repos:
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
+      - id: check-illegal-windows-names
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-shebang-scripts-are-executable
+      - id: check-symlinks
       - id: check-yaml
+      - id: check-toml
       - id: detect-private-key
       - id: end-of-file-fixer
+      - id: pretty-format-json
       - id: trailing-whitespace
 
   - repo: https://github.com/tomas-krupa/qmlformat-hook.git
