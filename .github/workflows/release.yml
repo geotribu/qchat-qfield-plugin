@@ -33,3 +33,14 @@ jobs:
             qfchat-latest.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Send notification on matrix
+        id: matrix-notification
+        uses: fadenb/matrix-chat-message@v0.0.6
+        with:
+          homeserver: ${{ secrets.PUBLISH_MATRIX_HOMESERVER }}
+          token: ${{ secrets.PUBLISH_MATRIX_TOKEN }}
+          channel: ${{ secrets.PUBLISH_MATRIX_CHANNEL }}
+          message: |
+            💬 New QChat QField plugin version: ${{ github.ref_name }} !\
+            -> https://github.com/geotribu/qchat-qfield-plugin/releases
