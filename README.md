@@ -7,7 +7,7 @@
 
 [![Latest release](https://img.shields.io/github/v/release/geotribu/qchat-qfield-plugin?label=latest%20release&logo=github)](https://github.com/geotribu/qchat-qfield-plugin/releases/latest)
 [![License: GPL v2](https://img.shields.io/badge/License-GPLv2-blue.svg)](LICENSE)
-[![QField](https://img.shields.io/badge/QField-plugin-green?logo=qgis)](https://docs.qfield.org/how-to/plugins/)
+[![QField](https://img.shields.io/badge/QField-plugin-green?logo=qgis)](https://api.qfield.org/)
 
 **QChat client in QField, let's chat with your GIS fellows on the field !**
 
@@ -19,7 +19,7 @@
 
 ## Installation
 
-You can follow [the QField documentation](https://docs.qfield.org/how-to/plugins/#application-plugins) regarding plugin installation.
+You can follow [the QField documentation](https://docs.qfield.org/how-to/advanced-how-tos/plugins/#application-plugins) regarding plugin installation.
 
 The URL to install the `QChat` plugin is:
 
