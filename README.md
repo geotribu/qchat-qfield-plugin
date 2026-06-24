@@ -96,7 +96,7 @@ uv run pytest tests -v --qgis_disable_gui
 
 - Make sure the `pyproject.toml` version is updated, e.g. with `uv version --bump minor`.
 
-- Create a new tag on the `main` branch, e.g. `git tag 1.4`, then `git push 1.4`. A workflow will then create the GitHub release.
+- Create a new tag on the `main` branch, e.g. `git tag 1.4`, then `git push origin 1.4`. A workflow will then create the GitHub release.
 
 > [!NOTE]
 > It is recommended to regularly prune the tags locally with `git fetch --prune --prune-tags`, since PR workflows might create some temporary ones.
