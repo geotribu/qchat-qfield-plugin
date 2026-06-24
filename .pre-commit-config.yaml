@@ -57,7 +57,7 @@ repos:
         language: node
         entry: prettier --write
         additional_dependencies:
-          - prettier@3.5.3
+          - prettier@3.8.4
         files: \.(js)$
 
 # Specific part for https://pre-commit.ci
