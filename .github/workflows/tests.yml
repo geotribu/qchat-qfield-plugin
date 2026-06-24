@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "qfield-plugin-qchat/main.qml"
+      - "tests/**"
+      - ".github/workflows/tests.yml"
   pull_request:
     branches:
       - main
