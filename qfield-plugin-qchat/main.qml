@@ -385,15 +385,17 @@ Item {
                                         color: Theme.secondaryTextColor
                                         wrapMode: Text.WordWrap
                                         text: {
+                                            const messageTime = new Date(historyData.timestamp).toLocaleTimeString({
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                                second: "2-digit"
+                                            });
                                             switch (historyType) {
                                             case plugin.qchat_message_type_text:
-                                                return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
                                             case plugin.qchat_message_type_image:
-                                                return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
                                             case plugin.qchat_message_type_bbox:
-                                                return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
                                             case plugin.qchat_message_type_position:
-                                                return "<i>" + qsTr("%1:").arg(historyData.author) + "</i>";
+                                                return "<i>" + qsTr("%1").arg(historyData.author) + "</i> (" + messageTime + "):";
                                             }
                                             return "";
                                         }
