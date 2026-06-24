@@ -4,9 +4,16 @@ repos:
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
+      - id: check-illegal-windows-names
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-shebang-scripts-are-executable
+      - id: check-symlinks
       - id: check-yaml
+      - id: check-toml
       - id: detect-private-key
       - id: end-of-file-fixer
+      - id: pretty-format-json
       - id: trailing-whitespace
 
   - repo: https://github.com/tomas-krupa/qmlformat-hook.git
@@ -50,7 +57,7 @@ repos:
         language: node
         entry: prettier --write
         additional_dependencies:
-          - prettier@3.5.3
+          - prettier@3.8.4
         files: \.(js)$
 
 # Specific part for https://pre-commit.ci
@@ -59,5 +66,7 @@ ci:
   autofix_prs: true
   autoupdate_commit_msg: "[pre-commit.ci] Automatic updates applied by git hooks."
   autoupdate_schedule: monthly
-  skip: []
+  skip: [
+    "qmlformat"
+  ]
   submodules: false

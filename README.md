@@ -1,7 +1,10 @@
 # QChat - QField plugin
 
+[![🎳 Tests](https://github.com/geotribu/qchat-qfield-plugin/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/geotribu/qchat-qfield-plugin/actions/workflows/tests.yml)
 [![🧹 Lint](https://github.com/geotribu/qchat-qfield-plugin/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/geotribu/qchat-qfield-plugin/actions/workflows/lint.yml)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/geotribu/giscqchat-qfield-pluginhat/main.svg)](https://results.pre-commit.ci/latest/github/geotribu/qchat-qfield-plugin/main)
 [![🚀 Release](https://github.com/geotribu/qchat-qfield-plugin/actions/workflows/release.yml/badge.svg)](https://github.com/geotribu/qchat-qfield-plugin/actions/workflows/release.yml)
+
 [![Latest release](https://img.shields.io/github/v/release/geotribu/qchat-qfield-plugin?label=latest%20release&logo=github)](https://github.com/geotribu/qchat-qfield-plugin/releases/latest)
 [![License: GPL v2](https://img.shields.io/badge/License-GPLv2-blue.svg)](LICENSE)
 [![QField](https://img.shields.io/badge/QField-plugin-green?logo=qgis)](https://docs.qfield.org/how-to/plugins/)
@@ -81,7 +84,7 @@ uv run python -c "from PyQt6.QtCore import QT_VERSION_STR; print(QT_VERSION_STR)
 - Clone QField locally, e.g.:
 
 ```sh
-git clone --depth 1 [--branch v4.2.3] https://github.com/opengisch/QField.git
+git clone --depth 1 [--branch release-4_2] https://github.com/opengisch/QField.git
 ```
 
 - Run tests:
@@ -92,11 +95,11 @@ uv run pytest tests -v --qgis_disable_gui
 
 ## Bump a new release
 
-- Make sure the `version` key is updated in [the plugin's metadata file](./qfield-plugin-qchat/metadata.txt).
+1. Make sure the `version` key is updated in [the plugin's metadata file](./qfield-plugin-qchat/metadata.txt).
 
-- Make sure the `pyproject.toml` version is updated, e.g. with `uv version --bump minor`.
+1. Make sure the `pyproject.toml` version is updated, e.g. with `uv version --bump minor`.
 
-- Create a new tag on the `main` branch, e.g. `git tag 1.4`, then `git push 1.4`. A workflow will then create the GitHub release.
+1. Create a new tag on the `main` branch, e.g. `git tag 1.4`, then `git push origin 1.4`. A workflow will then create the GitHub release.
 
 > [!NOTE]
 > It is recommended to regularly prune the tags locally with `git fetch --prune --prune-tags`, since PR workflows might create some temporary ones.
