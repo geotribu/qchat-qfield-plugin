@@ -30,7 +30,7 @@ jobs:
           - "4.0-questing"
           # - "4.0-trixie"
         qfield-refs:
-          - release-4_1
+          # - release-4_1
           - release-4_2
           - master
       fail-fast: false
