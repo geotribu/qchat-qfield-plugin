@@ -1,4 +1,4 @@
-name: ⛶ Zip & QR Code
+name: 📥 Zip & QR Code
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ on:
     paths:
       - 'qfield-plugin-qchat/**'
       - '.github/workflows/pr_qrcode.yml'
-      - '.github/scripts/**'
+      - 'scripts/**'
 
 jobs:
   zip-and-qr:
@@ -46,7 +46,7 @@ jobs:
           TAG_PREFIX: ${{ steps.config.outputs.tag_prefix }}
         with:
           script: |
-            const script = require('./.github/scripts/delete-pr-prereleases.js')
+            const script = require('./scripts/github/delete-pr-prereleases.js')
             await script({ github, context })
 
       - name: Zip the QField plugin
@@ -57,7 +57,7 @@ jobs:
       - name: Generate QR code
         run: |
           pip install qrcode[pil] --quiet
-          python3 .github/scripts/generate_qr_code.py
+          python3 ./scripts/generate_qr_code.py
         env:
           FILE_URL: https://github.com/${{ github.repository }}/releases/download/${{ steps.config.outputs.tag_name }}/${{ steps.config.outputs.zip_name }}
 
@@ -67,6 +67,14 @@ jobs:
           tag_name: ${{ steps.config.outputs.tag_name }}
           name: "PR #${{ github.event.pull_request.number }} - qfield-plugin-qchat"
           prerelease: true
+          body: |
+            This pre-release contains the ZIP artefact and the QR code for PR #${{ github.event.pull_request.number }}.
+            It was generated from commit `${{ steps.config.outputs.sha_short }}`.
+            It will be automatically deleted when the PR is closed.
+
+            Flash the following QR code in QField to test the plugin:
+
+            <img src="https://github.com/${{ github.repository }}/releases/download/${{ steps.config.outputs.tag_name }}/qrcode.png" alt="QR Code" width="360"/>
           files: |
             ${{ steps.config.outputs.zip_name }}
             qrcode.png
@@ -78,7 +86,7 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: github-actions[bot]
-          body-includes: ZIP artefact generated
+          body-includes: 📦 Artefacts generated
 
       - name: Create or update comment on the Pull Request
         uses: peter-evans/create-or-update-comment@v5
@@ -87,21 +95,18 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           edit-mode: replace
           body: |
-            ## 📦 ZIP artefact generated
+            ## 📦 Artefacts generated
 
-            | Info | Value |
+            | Element | Value |
             |------|-------|
-            | 📁 Directory | `${{ steps.config.outputs.directory }}` |
-            | 🗜️ File | `${{ steps.config.outputs.zip_name }}` |
+            | 📥 ZIP file | [`${{ steps.config.outputs.zip_name }}`](https://github.com/${{ github.repository }}/releases/download/${{ steps.config.outputs.tag_name }}/${{ steps.config.outputs.zip_name }}) |
+            | 🏷️ Tag | `${{ steps.config.outputs.tag_name }}` |
             | 🔑 Commit | `${{ steps.config.outputs.sha_short }}` |
-
-            ### 📥 Download
-            👉 [Download the ZIP directly](https://github.com/${{ github.repository }}/releases/download/${{ steps.config.outputs.tag_name }}/${{ steps.config.outputs.zip_name }})
+            | 🆕 Pre-release | [`PR #${{ github.event.pull_request.number }} - qfield-plugin-qchat`](https://github.com/${{ github.repository }}/releases/tag/${{ steps.config.outputs.tag_name }}) |
 
             ---
 
             ### 📱 QR Code: Flash in QField to test
-
             <img src="https://github.com/${{ github.repository }}/releases/download/${{ steps.config.outputs.tag_name }}/qrcode.png" alt="QR Code" width="360"/>
 
   cleanup:
@@ -122,7 +127,7 @@ jobs:
           TAG_PREFIX: pr-${{ github.event.pull_request.number }}-
         with:
           script: |
-            const script = require('./.github/scripts/delete-pr-prereleases.js')
+            const script = require('./scripts/github/delete-pr-prereleases.js')
             await script({ github, context })
 
       - name: Find bot comment
@@ -131,7 +136,7 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: github-actions[bot]
-          body-includes: ZIP artefact generated
+          body-includes: 📦 Artefacts generated
 
       - name: Delete bot comment
         if: steps.find-comment.outputs.comment-id != ''
@@ -140,5 +145,5 @@ jobs:
           COMMENT_ID: ${{ steps.find-comment.outputs.comment-id }}
         with:
           script: |
-            const script = require('./.github/scripts/delete-bot-comment.js')
+            const script = require('./scripts/github/delete-bot-comment.js')
             await script({ github, context })
