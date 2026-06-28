@@ -93,6 +93,32 @@ git clone --depth 1 [--branch release-4_2] https://github.com/opengisch/QField.g
 uv run pytest tests -v --qgis_disable_gui
 ```
 
+## Translate the plugin
+
+- install the required tools:
+
+```sh
+sudo apt install qt6-tools-dev-tools
+```
+
+- generate the translations strings:
+
+```sh
+/usr/lib/qt6/bin/lupdate qfield-plugin-qchat/translations.pro
+```
+
+- open the generated `.ts` files with [`Qt Linguist`](https://doc.qt.io/qt-6/qtlinguist-index.html), using the GUI or the command line:
+
+```sh
+/usr/lib/qt6/bin/linguist qfield-plugin-qchat/main_fr.ts
+```
+
+- compile the translations to `.qm` files:
+
+```sh
+/usr/lib/qt6/bin/lrelease qfield-plugin-qchat/main_fr.ts
+```
+
 ## Bump a new release
 
 1. Make sure the `version` key is updated in [the plugin's metadata file](./qfield-plugin-qchat/metadata.txt).
