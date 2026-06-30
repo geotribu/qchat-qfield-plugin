@@ -259,7 +259,7 @@ Item {
         }
 
         Component.onCompleted: {
-            standardButton(Dialog.Ok).text = "Connect";
+            standardButton(Dialog.Ok).text = qsTranslate("QfChat", "Connect");
         }
 
         Timer {
