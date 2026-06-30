@@ -1,4 +1,4 @@
-pragma Translation: QfChat
+pragma Translator: QfChat
 
 import QtQuick
 import QtQuick.Controls
