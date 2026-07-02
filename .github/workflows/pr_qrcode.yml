@@ -54,8 +54,11 @@ jobs:
           sudo apt update
           sudo apt install -y qt6-tools-dev-tools
 
+      - name: Locate lrelease
+        run: dpkg -L qt6-tools-dev-tools | grep -i lrelease
+
       - name: Compile translations
-        run: lrelease-qt6 qfield-plugin-qchat/translations.pro
+        run: lrelease qfield-plugin-qchat/translations.pro
 
       - name: Zip the QField plugin
         run: |
