@@ -50,7 +50,9 @@ jobs:
             await script({ github, context })
 
       - name: Install qt tools dependencies
-        run: apt install -y qt6-tools-dev-tools
+        run: |
+          sudo apt update
+          sudo apt install -y qt6-tools-dev-tools
 
       - name: Compile translations
         run: lrelease qfield-plugin-qchat/translations.pro
