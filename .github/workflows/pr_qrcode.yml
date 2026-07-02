@@ -53,11 +53,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y qt6-tools-dev-tools
-
-      - name: Locate lrelease
-        run: |
-          dpkg -L qt6-tools-dev-tools
-          sudo find / -iname "lrelease*" 2>/dev/null || true
+          echo "/usr/lib/qt6/bin" >> "$GITHUB_PATH"
 
       - name: Compile translations
         run: lrelease qfield-plugin-qchat/translations.pro
