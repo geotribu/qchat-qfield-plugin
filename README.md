@@ -110,13 +110,13 @@ sudo apt install qt6-tools-dev-tools
 - open the generated `.ts` files with [`Qt Linguist`](https://doc.qt.io/qt-6/qtlinguist-index.html), using the GUI or the command line:
 
 ```sh
-/usr/lib/qt6/bin/linguist qfield-plugin-qchat/mainfr.ts
+/usr/lib/qt6/bin/linguist qfield-plugin-qchat/main_fr.ts
 ```
 
 - compile the translations to `.qm` files:
 
 ```sh
-/usr/lib/qt6/bin/lrelease qfield-plugin-qchat/mainfr.ts
+/usr/lib/qt6/bin/lrelease qfield-plugin-qchat/main_fr.ts
 ```
 
 ## Bump a new release

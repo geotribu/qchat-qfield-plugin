@@ -1,4 +1,4 @@
 SOURCES += main.qml
 
 TRANSLATIONS += \
-    mainfr.ts
+    main_fr.ts
