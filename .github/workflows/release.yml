@@ -18,6 +18,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Install qt tools dependencies
+        run: apt install -y qt6-tools-dev-tools
+
+      - name: Compile translations
+        run: lrelease qfield-plugin-qchat/translations.pro
+
       - name: Zip the QField plugin
         run: |
           cd qfield-plugin-qchat
