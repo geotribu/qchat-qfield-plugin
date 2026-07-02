@@ -49,6 +49,15 @@ jobs:
             const script = require('./scripts/github/delete-pr-prereleases.js')
             await script({ github, context })
 
+      - name: Install qt tools dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y qt6-base-dev qt6-tools-dev-tools
+          echo "/usr/lib/qt6/bin" >> "$GITHUB_PATH"
+
+      - name: Compile translations
+        run: lrelease qfield-plugin-qchat/translations.pro
+
       - name: Zip the QField plugin
         run: |
           cd ${{ steps.config.outputs.directory }}
