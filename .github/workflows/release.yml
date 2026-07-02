@@ -21,7 +21,7 @@ jobs:
       - name: Install qt tools dependencies
         run: |
           sudo apt update
-          sudo apt install -y qt6-tools-dev-tools
+          sudo apt install -y qt6-base-dev qt6-tools-dev-tools
           echo "/usr/lib/qt6/bin" >> "$GITHUB_PATH"
 
       - name: Compile translations
