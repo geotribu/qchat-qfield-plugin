@@ -9,3 +9,6 @@ __pycache__
 
 # qfield local clone
 QField/
+
+# translation files
+*.qm

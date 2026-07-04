@@ -1,3 +1,5 @@
+pragma Translator: QfChat
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -38,7 +40,7 @@ Item {
 
     Dialog {
         id: connectionDialog
-        title: qsTr("Connection - QChat")
+        title: qsTranslate("QfChat", "Connection - QChat")
         focus: true
         font: Theme.defaultFont
         parent: mainWindow.contentItem
@@ -79,7 +81,7 @@ Item {
             Label {
                 id: connectionLabel
                 width: mainWindow.width - 60 < labelMetrics.width ? mainWindow.width - 60 : labelMetrics.width
-                text: qsTr("Pick a server, a channel, and enter your user identifier below.")
+                text: qsTranslate("QfChat", "Pick a server, a channel, and enter your nickname below.")
                 wrapMode: Text.WordWrap
                 font: Theme.defaultFont
                 color: Theme.mainTextColor
@@ -106,7 +108,7 @@ Item {
                     enabled: ws.status == WebSocket.Closed
                     font: Theme.defaultFont
                     text: parent.displayText
-                    placeholderText: qsTr("Server")
+                    placeholderText: qsTranslate("QfChat", "Server")
 
                     onTextChanged: {
                         getChannelsTimer.restart();
@@ -146,7 +148,7 @@ Item {
                     enabled: ws.status == WebSocket.Closed
                     font: Theme.defaultFont
                     text: parent.displayText
-                    placeholderText: qsTr("Channel")
+                    placeholderText: qsTranslate("QfChat", "Channel")
                 }
 
                 background: Rectangle {
@@ -171,7 +173,7 @@ Item {
                 width: connectionLabel.width
                 font: Theme.defaultFont
                 enabled: ws.status == WebSocket.Closed
-                placeholderText: qsTr("User name")
+                placeholderText: qsTranslate("QfChat", "User name")
             }
 
             ComboBox {
@@ -257,7 +259,7 @@ Item {
         }
 
         Component.onCompleted: {
-            standardButton(Dialog.Ok).text = "Connect";
+            standardButton(Dialog.Ok).text = qsTranslate("QfChat", "Connect");
         }
 
         Timer {
@@ -289,7 +291,7 @@ Item {
 
     Dialog {
         id: qchatMainDialog
-        title: qsTr("QChat")
+        title: qsTranslate("QfChat", "QChat")
         focus: true
         font: Theme.defaultFont
         parent: mainWindow.contentItem
@@ -395,7 +397,7 @@ Item {
                                             case plugin.qchat_message_type_image:
                                             case plugin.qchat_message_type_bbox:
                                             case plugin.qchat_message_type_position:
-                                                return "<i>" + qsTr("%1").arg(historyData.author) + "</i> (" + messageTime + "):";
+                                                return "<i>" + qsTranslate("QfChat", "%1").arg(historyData.author) + "</i> (" + messageTime + "):";
                                             }
                                             return "";
                                         }
@@ -439,7 +441,7 @@ Item {
                                     borderColor: Theme.mainTextColor
                                     color: Theme.mainTextColor
                                     bgcolor: "transparent"
-                                    text: qsTr("🔳 Zoom to extent")
+                                    text: qsTranslate("QfChat", "🔳 Zoom to extent")
 
                                     onClicked: {
                                         const wkt = "MULTIPOINT((" + historyData.xmin + " " + historyData.ymin + "),(" + historyData.xmax + " " + historyData.ymax + "))";
@@ -456,7 +458,7 @@ Item {
                                     borderColor: Theme.mainTextColor
                                     color: Theme.mainTextColor
                                     bgcolor: "transparent"
-                                    text: qsTr("📍 Go to location")
+                                    text: qsTranslate("QfChat", "📍 Go to location")
 
                                     onClicked: {
                                         const point = GeometryUtils.point(historyData.x, historyData.y);
@@ -487,7 +489,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         width: parent.width - 150
                         font: Theme.defaultFont
-                        placeholderText: "Message content"
+                        placeholderText: qsTranslate("QfChat", "Message content")
                     }
 
                     QfToolButton {
@@ -548,7 +550,7 @@ Item {
 
         footer: DialogButtonBox {
             Button {
-                text: qsTr("Minimize")
+                text: qsTranslate("QfChat", "Minimize")
                 flat: true
                 DialogButtonBox.buttonRole: DialogButtonBox.ResetRole
                 onClicked: {
@@ -557,12 +559,12 @@ Item {
                 }
             }
             Button {
-                text: qsTr("Disconnect")
+                text: qsTranslate("QfChat", "Disconnect")
                 flat: true
                 DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
             }
             Button {
-                text: qsTr("Close")
+                text: qsTranslate("QfChat", "Close")
                 flat: true
                 DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
             }
@@ -672,16 +674,16 @@ Item {
                 text: {
                     const last_message = plugin.qchatLastMessage;
                     if (!last_message)
-                        return qsTr("QChat");
+                        return qsTranslate("QfChat", "QChat");
                     if (last_message.type === plugin.qchat_message_type_image)
-                        return (last_message.author || "") + ": " + qsTr("[image sent]");
+                        return (last_message.author || "") + ": " + qsTranslate("QfChat", "[image sent]");
                     if (last_message.type === plugin.qchat_message_type_text)
                         return (last_message.author || "") + ": " + (last_message.text || "");
                     if (last_message.type === plugin.qchat_message_type_bbox)
-                        return (last_message.author || "") + ": [extent]";
+                        return (last_message.author || "") + ": " + qsTranslate("QfChat", "[extent]");
                     if (last_message.type === plugin.qchat_message_type_position)
-                        return (last_message.author || "") + ": [location]";
-                    return qsTr("QChat - no message");
+                        return (last_message.author || "") + ": " + qsTranslate("QfChat", "[location]");
+                    return qsTranslate("QfChat", "QChat - no message");
                 }
             }
 
@@ -794,9 +796,9 @@ Item {
             return "";
         for (let i = 0; i < qchatAvatarChoices.length; i++) {
             if (qchatAvatarChoices[i].value === avatarValue)
-                return qchatAvatarChoices[i].label;
+                return qsTranslate("QfChat", qchatAvatarChoices[i].label);
         }
-        return "XYZ";
+        return qsTranslate("QfChat", "XYZ");
     }
 
     readonly property string qchat_message_type_bbox: "bbox"
@@ -837,7 +839,7 @@ Item {
         function handleCheatCode(message) {
             switch (message.text) {
             case "qgisprolicense":
-                mainWindow.displayToast(qsTr("Your QField pro license is about to expire. Consider renewing it !"));
+                mainWindow.displayToast(qsTranslate("QfChat", "Your QField pro license is about to expire. Consider renewing it !"));
                 break;
             case "wizz":
                 // make the device vibrate for 1 second
@@ -857,7 +859,7 @@ Item {
                     break;
                 }
                 if (event.text.includes("@" + qchatSettings.lastUserName) || event.text.includes("@all")) {
-                    mainWindow.displayToast(qsTr("QChat mention by %1: '%2'").arg(event.author).arg(event.text));
+                    mainWindow.displayToast(qsTranslate("QfChat", "QChat mention by %1: '%2'").arg(event.author).arg(event.text));
                 }
             case plugin.qchat_message_type_image:
             case plugin.qchat_message_type_position:
@@ -874,7 +876,7 @@ Item {
                 };
                 break;
             case plugin.qchat_message_type_nb_users:
-                qchatMainDialog.title = "<b>#" + qchatSettings.lastChannel + "</b>, " + qsTr("%n user(s)", "", event.nb_users) + " - QChat";
+                qchatMainDialog.title = "<b>#" + qchatSettings.lastChannel + "</b>, " + qsTranslate("QfChat", "%n user(s)", "", event.nb_users) + " - QChat";
                 break;
             default:
                 break;
