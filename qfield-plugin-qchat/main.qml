@@ -464,7 +464,7 @@ Item {
                                         const point = GeometryUtils.point(historyData.x, historyData.y);
                                         const crs = CoordinateReferenceSystemUtils.fromDescription(historyData.crs_authid);
                                         const projectedPoint = GeometryUtils.reprojectPoint(point, crs, qgisProject.crs);
-                                        mapCanvas.mapSettings.center = projectedPoint;
+                                        mapCanvas.jumpTo(projectedPoint);
                                     }
                                 }
                             }
