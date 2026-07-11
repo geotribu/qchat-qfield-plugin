@@ -30,15 +30,27 @@ jobs:
       - name: Zip the QField plugin
         run: |
           cd qfield-plugin-qchat
-          zip -r "../qfchat-${GITHUB_REF#refs/tags/}.zip" ./*
+          zip -r "../qfchat-${{ github.ref_name }}.zip" ./*
           zip -r "../qfchat-latest.zip" ./*
+
+      - name: Generate QR code
+        run: |
+          pip install qrcode[pil] --quiet
+          python3 ./scripts/generate_qr_code.py
+        env:
+          FILE_URL: https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/qfchat-${{ github.ref_name }}.zip
 
       - name: Create GitHub Release with assets
         uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true
           files: |
-            qfchat-${GITHUB_REF#refs/tags/}.zip
+            qfchat-${{ github.ref_name }}.zip
             qfchat-latest.zip
+            qrcode.png
+          append_body: |
+            Flash the following QR code in QField to run this plugin version:
+
+            <img src="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/qrcode.png" alt="QR Code" width="360"/>
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
