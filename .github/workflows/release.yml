@@ -48,7 +48,7 @@ jobs:
             qfchat-${{ github.ref_name }}.zip
             qfchat-latest.zip
             qrcode.png
-          body: |
+          append_body: |
             Flash the following QR code in QField to run this plugin version:
 
             <img src="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/qrcode.png" alt="QR Code" width="360"/>
