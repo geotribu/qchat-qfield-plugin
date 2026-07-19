@@ -2,7 +2,7 @@
 
 [![🎳 Tests](https://github.com/geotribu/qchat-qfield-plugin/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/geotribu/qchat-qfield-plugin/actions/workflows/tests.yml)
 [![🧹 Lint](https://github.com/geotribu/qchat-qfield-plugin/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/geotribu/qchat-qfield-plugin/actions/workflows/lint.yml)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/geotribu/giscqchat-qfield-pluginhat/main.svg)](https://results.pre-commit.ci/latest/github/geotribu/qchat-qfield-plugin/main)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/geotribu/qchat-qfield-plugin/main.svg)](https://results.pre-commit.ci/latest/github/geotribu/qchat-qfield-plugin/main)
 [![🚀 Release](https://github.com/geotribu/qchat-qfield-plugin/actions/workflows/release.yml/badge.svg)](https://github.com/geotribu/qchat-qfield-plugin/actions/workflows/release.yml)
 
 [![Latest release](https://img.shields.io/github/v/release/geotribu/qchat-qfield-plugin?label=latest%20release&logo=github)](https://github.com/geotribu/qchat-qfield-plugin/releases/latest)
