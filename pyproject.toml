@@ -1,6 +1,6 @@
 [project]
 name = "qchat-qfield-plugin"
-version = "1.6"
+version = "1.7"
 description = "Python project for QChat QField plugin tests."
 readme = "README.md"
 requires-python = ">=3.12"

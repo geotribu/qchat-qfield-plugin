@@ -129,7 +129,7 @@ wheels = [
 
 [[package]]
 name = "qchat-qfield-plugin"
-version = "1.6"
+version = "1.7"
 source = { virtual = "." }
 
 [package.dev-dependencies]
