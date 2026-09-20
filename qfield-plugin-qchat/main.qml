@@ -813,7 +813,7 @@ Item {
     readonly property string qchat_message_type_text: "text"
     readonly property string qchat_message_type_uncompliant: "uncompliant"
 
-    readonly property var qchat_cheatcodes: ["givemesomecheese", "lookattheflickofqgis", "iamarobot", "its10oclock", "qgisprolicense", "wizz", "spaceandtime",]
+    readonly property var qchat_cheatcodes: ["givemesomecheese", "lookattheflickofqgis", "iamarobot", "its10oclock", "qgisprolicense", "wizz", "spaceandtime", "vAIsectomy", "jeanclaude"]
 
     WebSocket {
         id: ws
