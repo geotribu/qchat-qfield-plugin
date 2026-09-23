@@ -32,7 +32,7 @@ jobs:
           - stable-trixie
         qfield-refs:
           # list the QField branches to test against
-          - release-4_2
+          - release-4_3
           - master
       fail-fast: false
 
