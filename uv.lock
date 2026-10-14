@@ -51,27 +51,6 @@ wheels = [
 ]
 
 [[package]]
-name = "pyqt6"
-version = "6.9.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "pyqt6-qt6" },
-    { name = "pyqt6-sip" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/32/1b/567f46eb43ca961efd38d7a0b73efb70d7342854f075fd919179fdb2a571/pyqt6-6.9.1.tar.gz", hash = "sha256:50642be03fb40f1c2111a09a1f5a0f79813e039c15e78267e6faaf8a96c1c3a6", size = 1067230, upload-time = "2025-06-06T08:49:30.307Z" }
-
-[[package]]
-name = "pyqt6-qt6"
-version = "6.9.2"
-source = { registry = "https://pypi.org/simple" }
-
-[[package]]
-name = "pyqt6-sip"
-version = "13.11.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/90/24/a753e1af94b9ae5b2da63d4598457308da3cdbf0838c959381db086ccc86/pyqt6_sip-13.11.1.tar.gz", hash = "sha256:869c5b48afe38e55b1ee0dd72182b0886e968cc509b98023ff50010b013ce1be", size = 92574, upload-time = "2026-03-09T13:01:35.418Z" }
-
-[[package]]
 name = "pytest"
 version = "9.1.1"
 source = { registry = "https://pypi.org/simple" }
@@ -89,16 +68,15 @@ wheels = [
 
 [[package]]
 name = "pytest-qfield"
-version = "0.9.0"
+version = "0.11.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "pyqt6", marker = "sys_platform == 'never'" },
     { name = "pytest-qgis" },
     { name = "pytest-qt" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/45/4f/d724c25c706010ada09d27f78f15d0d67915ebe14c7434d72d870504f389/pytest_qfield-0.9.0.tar.gz", hash = "sha256:5e3b19a8d0f8a47ce85fa712de160084e794e3832d640487483e5c8b5be81a77", size = 35126, upload-time = "2026-06-12T05:31:28.576Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c4/a2/73b3dcf414c4c52fcee5a804763beb7a73a927087d2e01e0a0164ae69dba/pytest_qfield-0.11.0.tar.gz", hash = "sha256:db3a4cc19588f65f2f83c31712893d858c9685ae49710e72f9c0f927758e356d", size = 37421, upload-time = "2026-10-13T11:49:50.832Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/38/82/e58e35a3f720aae12c35a1e812d69bcc0fab2034e9e9d51004c9288c56b3/pytest_qfield-0.9.0-py3-none-any.whl", hash = "sha256:f206d896cafbdb34bc907a9d53f7a335da019994512256afc113fc715ce6d30a", size = 36773, upload-time = "2026-06-12T05:31:29.482Z" },
+    { url = "https://files.pythonhosted.org/packages/a0/5d/dfa495c77be510dd724e9136eeb0b450104c89aa470a70403dea06b294a7/pytest_qfield-0.11.0-py3-none-any.whl", hash = "sha256:d890da745152298b7feaf268228e9de101443ad5af0d113b3726ee6f25a31e8b", size = 38712, upload-time = "2026-10-13T11:49:49.689Z" },
 ]
 
 [[package]]
@@ -143,7 +121,7 @@ dev = [
 [package.metadata.requires-dev]
 dev = [
     { name = "pytest", specifier = ">=9.1.1" },
-    { name = "pytest-qfield", specifier = ">=0.9.0" },
+    { name = "pytest-qfield", specifier = ">=0.11.0" },
 ]
 
 [[package]]
