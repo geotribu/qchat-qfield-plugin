@@ -256,6 +256,8 @@ Item {
             qchatSettings.lastChannel = serverChannelField.text.trim();
             qchatSettings.lastUrl = serverUrlField.text.trim();
             qchatSettings.lastAvatar = qchatAvatarChoices[avatarComboBox.currentIndex].value;
+
+            getCheats();
         }
 
         Component.onCompleted: {
@@ -281,6 +283,22 @@ Item {
                 if (request.readyState === XMLHttpRequest.DONE) {
                     let responseArray = JSON.parse(request.response);
                     serverChannelComboBox.model = responseArray;
+                }
+            };
+
+            request.open("GET", url);
+            request.send();
+        }
+
+        function getCheats() {
+            const url = serverUrlField.text.trim() + "/cheats";
+            const request = new XMLHttpRequest();
+
+            request.onreadystatechange = function () {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    const responseArray = JSON.parse(request.response);
+                    qchat_cheatcodes.length = 0;
+                    responseArray.forEach(item => qchat_cheatcodes.push(item));
                 }
             };
 
@@ -813,7 +831,7 @@ Item {
     readonly property string qchat_message_type_text: "text"
     readonly property string qchat_message_type_uncompliant: "uncompliant"
 
-    readonly property var qchat_cheatcodes: ["givemesomecheese", "lookattheflickofqgis", "iamarobot", "its10oclock", "qgisprolicense", "wizz", "spaceandtime", "vAIsectomy", "jeanclaude"]
+    readonly property var qchat_cheatcodes: []
 
     WebSocket {
         id: ws
