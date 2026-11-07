@@ -21,7 +21,7 @@ repos:
     hooks:
       - id: qmlformat
         additional_dependencies:
-          - PySide6-Essentials==6.11.1
+          - PySide6-Essentials==6.12.0
 
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.38.0
@@ -32,7 +32,7 @@ repos:
           - .yamllint.yaml
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.16.10"
+    rev: "v0.17.4"
     hooks:
       - id: ruff
         args:
@@ -44,7 +44,7 @@ repos:
           - --target-version=py312
 
   - repo: https://github.com/pycqa/isort
-    rev: 9.0.2
+    rev: 10.0.0b2
     hooks:
       - id: isort
         args:
@@ -57,7 +57,7 @@ repos:
         language: node
         entry: prettier --write
         additional_dependencies:
-          - prettier@3.8.4
+          - prettier@3.9.10
         files: \.(js)$
 
 # Specific part for https://pre-commit.ci
