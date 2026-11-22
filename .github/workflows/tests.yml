@@ -5,16 +5,20 @@ on:
     branches:
       - main
     paths:
+      - ".github/workflows/tests.yml"
+      - "pyproject.toml"
       - "qfield-plugin-qchat/main.qml"
       - "tests/**"
-      - ".github/workflows/tests.yml"
+      - "uv.lock"
   pull_request:
     branches:
       - main
     paths:
+      - ".github/workflows/tests.yml"
+      - "pyproject.toml"
       - "qfield-plugin-qchat/main.qml"
       - "tests/**"
-      - ".github/workflows/tests.yml"
+      - "uv.lock"
 
 jobs:
   tests:
