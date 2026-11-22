@@ -8,8 +8,8 @@ dependencies = []
 
 [dependency-groups]
 dev = [
-    "pytest>=9.1.1",
-    "pytest-qfield>=0.11.0",
+    "pytest>=9.2.0",
+    "pytest-qfield>=0.12.0",
 ]
 
 [tool.pytest.ini_options]
